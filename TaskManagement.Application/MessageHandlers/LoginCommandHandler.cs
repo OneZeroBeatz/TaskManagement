@@ -1,10 +1,12 @@
-﻿using Invoicing.CrossCutting.Domain;
+﻿using FluentValidation;
+using Invoicing.CrossCutting.Domain;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TaskManagement.Application.Extensions;
 using TaskManagement.Application.Messages;
 using TaskManagement.Application.Repositories;
 
@@ -13,17 +15,24 @@ namespace TaskManagement.Application.MessageHandlers
     public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<string>>
     {
         private readonly IUserRepository _userRepository;
+        private readonly IValidator<LoginCommand> _validator;
         private readonly IConfiguration _configuration;
 
-
-        public LoginCommandHandler(IUserRepository userRepository, IConfiguration configuration)
+        public LoginCommandHandler(IUserRepository userRepository,
+                                   IValidator<LoginCommand> validator,
+                                   IConfiguration configuration)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         public async Task<Result<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
+            var result = _validator.Validate(request);
+            if (!result.IsValid)
+                return result.CreateErrorResult<string>();
+
             var user = await _userRepository.GetByEmail(request.Email);
 
             if (user == null)

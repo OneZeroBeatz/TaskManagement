@@ -1,3 +1,4 @@
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -5,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using TaskManagement.Application.MessageHandlers;
 using TaskManagement.Application.Repositories;
+using TaskManagement.Application.Vaidations;
 using TaskManagement.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +35,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 var messageHandlersAssembly = Assembly.GetAssembly(typeof(LoginCommandHandler));
 builder.Services.AddMediatR(messageHandlersAssembly!);
+builder.Services.AddValidatorsFromAssemblyContaining<LoginCommandValidator>();
 
 
 var app = builder.Build();
