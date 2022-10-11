@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
+using TaskManagement.Application.Factories;
+using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.MessageHandlers;
 using TaskManagement.Application.Repositories;
 using TaskManagement.Application.Vaidations;
@@ -22,6 +24,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthenticationTokenFactory, AuthenticationTokenFactory>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

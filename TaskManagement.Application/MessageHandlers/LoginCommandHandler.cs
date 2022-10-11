@@ -1,12 +1,8 @@
 ﻿using FluentValidation;
 using Invoicing.CrossCutting.Domain;
 using MediatR;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using TaskManagement.Application.Extensions;
+using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.Messages;
 using TaskManagement.Application.Repositories;
 
@@ -16,15 +12,15 @@ namespace TaskManagement.Application.MessageHandlers
     {
         private readonly IUserRepository _userRepository;
         private readonly IValidator<LoginCommand> _validator;
-        private readonly IConfiguration _configuration;
+        private readonly IAuthenticationTokenFactory _authenticationTokenFactory;
 
         public LoginCommandHandler(IUserRepository userRepository,
                                    IValidator<LoginCommand> validator,
-                                   IConfiguration configuration)
+                                   IAuthenticationTokenFactory authenticationTokenFactory)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _authenticationTokenFactory = authenticationTokenFactory ?? throw new ArgumentNullException(nameof(authenticationTokenFactory));
         }
 
         public async Task<Result<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -41,31 +37,9 @@ namespace TaskManagement.Application.MessageHandlers
             if (user.Password != request.Password)
                 return Result.Error<string>("Invalid credentials.");
 
-            string token = GenerateToken(request.Email);
+            string token = _authenticationTokenFactory.GenerateToken(request.Email);
 
             return Result.Ok(token);
-        }
-
-        private string GenerateToken(string email)
-        {
-            var claims = new[]
-            {
-                new Claim (ClaimTypes.Email, email),
-            };
-
-            //TODO: Create model for configuration
-            var keyAsBytes = Encoding.UTF8.GetBytes(_configuration.GetSection("Token:Key").Value);
-            var symmetricSecurityKey = new SymmetricSecurityKey(keyAsBytes);
-
-            var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);
-
-            var jwtToken = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddHours(int.Parse(_configuration.GetSection("Token:ExpirationInHours").Value)),
-                signingCredentials: credentials);
-
-            var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-            return token;
         }
     }
 }
