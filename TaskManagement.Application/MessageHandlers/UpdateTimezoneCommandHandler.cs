@@ -4,7 +4,6 @@ using MediatR;
 using TaskManagement.Application.Extensions;
 using TaskManagement.Application.Messages;
 using TaskManagement.Application.Repositories;
-using TaskManagement.Domain.Models;
 
 namespace TaskManagement.Application.MessageHandlers
 {
@@ -22,18 +21,22 @@ namespace TaskManagement.Application.MessageHandlers
 
         public async Task<Result> Handle(UpdateTimezoneCommand request, CancellationToken cancellationToken)
         {
-            var result = _validator.Validate(request);
-            if (!result.IsValid)
-                return result.CreateErrorResult();
+            try
+            {
+                var result = _validator.Validate(request);
+                if (!result.IsValid)
+                    return result.CreateErrorResult();
 
-            var timezone = TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);
+                var timezone = TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);
 
-            if (timezone == null)
+                await _userRepository.UpdateTimezone(request.TimeZoneId, request.Email);
+
+                return Result.Ok();
+            }
+            catch (TimeZoneNotFoundException)
+            {
                 return Result.Error("Invalid timezone");
-
-            await _userRepository.UpdateTimezone(request.TimeZoneId, "email1@gmail.com");
-
-            return Result.Ok();
+            }
         }
     }
 }
