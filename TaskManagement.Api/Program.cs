@@ -1,6 +1,9 @@
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
+using TaskManagement.Application.MessageHandlers;
 using TaskManagement.Application.Repositories;
 using TaskManagement.Infrastructure.Repositories;
 
@@ -28,6 +31,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
+var messageHandlersAssembly = Assembly.GetAssembly(typeof(LoginCommandHandler));
+builder.Services.AddMediatR(messageHandlersAssembly!);
 
 
 var app = builder.Build();
@@ -39,7 +44,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 
 app.UseHttpsRedirection();
 
