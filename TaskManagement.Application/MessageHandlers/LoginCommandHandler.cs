@@ -2,13 +2,9 @@
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using TaskManagement.Application.Messages;
 using TaskManagement.Application.Repositories;
 
@@ -18,6 +14,7 @@ namespace TaskManagement.Application.MessageHandlers
     {
         private readonly IUserRepository _userRepository;
         private readonly IConfiguration _configuration;
+
 
         public LoginCommandHandler(IUserRepository userRepository, IConfiguration configuration)
         {
@@ -47,14 +44,15 @@ namespace TaskManagement.Application.MessageHandlers
                 new Claim (ClaimTypes.Email, email),
             };
 
-            var keyAsBytes = Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value);
+            //TODO: Create model for configuration
+            var keyAsBytes = Encoding.UTF8.GetBytes(_configuration.GetSection("Token:Key").Value);
             var symmetricSecurityKey = new SymmetricSecurityKey(keyAsBytes);
 
             var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);
 
             var jwtToken = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddHours(6),
+                expires: DateTime.Now.AddHours(int.Parse(_configuration.GetSection("Token:ExpirationInHours").Value)),
                 signingCredentials: credentials);
 
             var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
