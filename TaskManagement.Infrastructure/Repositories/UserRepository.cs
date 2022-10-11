@@ -16,9 +16,9 @@ namespace TaskManagement.Infrastructure.Repositories
             };
         }
 
-        public Task<User> GetByEmail(string email)
+        public Task<User?> GetByEmail(string email)
         {
-            return System.Threading.Tasks.Task.FromResult(_users.First(x => x.Email.Equals(email, StringComparison.OrdinalIgnoreCase)));
+            return System.Threading.Tasks.Task.FromResult(_users.FirstOrDefault(x => x.Email.Equals(email, StringComparison.OrdinalIgnoreCase)));
         }
     }
 }
