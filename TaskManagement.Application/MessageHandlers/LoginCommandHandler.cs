@@ -47,9 +47,10 @@ namespace TaskManagement.Application.MessageHandlers
                 new Claim (ClaimTypes.Email, email),
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+            var keyAsBytes = Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value);
+            var symmetricSecurityKey = new SymmetricSecurityKey(keyAsBytes);
 
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            var credentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha512Signature);
 
             var jwtToken = new JwtSecurityToken(
                 claims: claims,
