@@ -12,9 +12,11 @@ namespace TaskManagement.Api.Controllers
     public class LoginController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
-        public LoginController(IUserRepository userRepository)
+        private readonly IConfiguration _configuration;
+        public LoginController(IUserRepository userRepository, IConfiguration configuration)
         {
-            _userRepository = userRepository;
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
         [HttpGet(Name = "login")]
@@ -31,16 +33,16 @@ namespace TaskManagement.Api.Controllers
             var claims = new[]
             {
                 new Claim (ClaimTypes.Email, email),
-                new Claim(ClaimTypes.NameIdentifier, user.Username)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("validationKey"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var jwtToken = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
-                );
+                expires: DateTime.Now.AddHours(6),
+                signingCredentials: credentials);
 
             var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
