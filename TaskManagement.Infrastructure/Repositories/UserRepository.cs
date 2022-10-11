@@ -1,4 +1,5 @@
-﻿using TaskManagement.Application.Repositories;
+﻿using System.ComponentModel.DataAnnotations;
+using TaskManagement.Application.Repositories;
 using TaskManagement.Domain.Models;
 
 namespace TaskManagement.Infrastructure.Repositories
@@ -19,6 +20,13 @@ namespace TaskManagement.Infrastructure.Repositories
         public Task<User?> GetByEmail(string email)
         {
             return System.Threading.Tasks.Task.FromResult(_users.FirstOrDefault(x => x.Email.Equals(email, StringComparison.OrdinalIgnoreCase)));
+        }
+
+        public System.Threading.Tasks.Task UpdateTimezone(string timeZoneId, string email)
+        {
+            var user = _users.FirstOrDefault(x => x.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+            user!.TimeZoneId = timeZoneId;
+            return System.Threading.Tasks.Task.FromResult(true);
         }
     }
 }
