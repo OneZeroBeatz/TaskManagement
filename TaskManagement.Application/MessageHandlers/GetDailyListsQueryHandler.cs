@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
+using TaskManagement.Application.Extensions;
 using TaskManagement.Application.Messages;
 using TaskManagement.Application.Messages.Responses;
 using TaskManagement.Application.Repositories;
@@ -10,19 +12,25 @@ namespace TaskManagement.Application.MessageHandlers
     {
         private readonly IDailyListRepository _dailyListRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IValidator<GetDailyListsQuery> _validator;
 
-        public GetDailyListsQueryHandler(IDailyListRepository dailyListRepository, IUserRepository userRepository)
+        //TODO: Move to configuration
+        private const int PageSize = 2;
+
+        public GetDailyListsQueryHandler(IDailyListRepository dailyListRepository,
+                                         IUserRepository userRepository,
+                                         IValidator<GetDailyListsQuery> validator)
         {
             _dailyListRepository = dailyListRepository ?? throw new ArgumentNullException(nameof(dailyListRepository));
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
         public async Task<Result<GetDailyListsResponse>> Handle(GetDailyListsQuery request, CancellationToken cancellationToken)
         {
-            if (request.Page <= 0)
-                return Result.Error<GetDailyListsResponse>("Page must be a positive number");
-
-            var pageSize = 2;
+            var result = _validator.Validate(request);
+            if (!result.IsValid)
+                return result.CreateErrorResult<GetDailyListsResponse>();
 
             var user = await _userRepository.GetByEmail(request.UserEmail);
             if (user == null)
@@ -30,12 +38,12 @@ namespace TaskManagement.Application.MessageHandlers
 
             var totalNumberOfDailyLists = await _dailyListRepository.GetCountForUser(user.Id);
 
-            var pageCount = Math.Ceiling((double)totalNumberOfDailyLists / pageSize);
+            var pageCount = Math.Ceiling((double)totalNumberOfDailyLists / PageSize);
 
             if (request.Page > pageCount)
                 return Result.Error<GetDailyListsResponse>("There is no such page");
 
-            var dailyListsForPage = await _dailyListRepository.Get(request.Page, pageSize, user.Id);
+            var dailyListsForPage = await _dailyListRepository.Get(request.Page, PageSize, user.Id);
 
             var response = new GetDailyListsResponse()
             {
