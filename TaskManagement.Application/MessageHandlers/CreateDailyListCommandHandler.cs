@@ -8,7 +8,7 @@ using TaskManagement.Shared;
 
 namespace TaskManagement.Application.MessageHandlers
 {
-    public class CreateDailyListCommandHandler : IRequestHandler<CreateDailyListCommand, Result>
+    public class CreateDailyListCommandHandler : IRequestHandler<CreateDailyListCommand, Result<int>>
     {
         private readonly IUserRepository _userRepository; 
         private readonly IDailyListRepository _dailyListRepository;
@@ -23,15 +23,15 @@ namespace TaskManagement.Application.MessageHandlers
             _dailyListRepository = dailyListRepository ?? throw new ArgumentNullException(nameof(dailyListRepository));
         }
 
-        public async Task<Result> Handle(CreateDailyListCommand request, CancellationToken cancellationToken)
+        public async Task<Result<int>> Handle(CreateDailyListCommand request, CancellationToken cancellationToken)
         {
             var result = _validator.Validate(request);
             if (!result.IsValid)
-                return result.CreateErrorResult();
+                return result.CreateErrorResult<int>();
 
             var user = await _userRepository.GetByEmail(request.UserEmail);
             if (user == null)
-                return Result.Error<GetDailyListsResponse>("User does not exist");
+                return Result.Error<int>("User does not exist");
 
             //TODO: Create factory
             var dailyList = new Domain.Models.DailyList()
@@ -42,9 +42,9 @@ namespace TaskManagement.Application.MessageHandlers
                 UserId = user.Id
             };
 
-            await _dailyListRepository.Create(dailyList);
+            var dailyListId = await _dailyListRepository.InsertAsync(dailyList);
 
-            return Result.Ok();
+            return Result.Ok(dailyListId);
         }
     }
 }

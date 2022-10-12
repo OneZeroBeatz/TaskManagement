@@ -15,7 +15,7 @@ namespace TaskManagement.Application.MessageHandlers
         private readonly IValidator<GetDailyListsQuery> _validator;
 
         //TODO: Move to configuration
-        private const int PageSize = 2;
+        private const int PageSize = 10;
 
         public GetDailyListsQueryHandler(IDailyListRepository dailyListRepository,
                                          IUserRepository userRepository,
@@ -52,7 +52,8 @@ namespace TaskManagement.Application.MessageHandlers
             {
                 DailyLists = dailyListsForPage,
                 Page = request.Page,
-                PageCount = (int)pageCount
+                PageCount = (int)pageCount,
+                PageSize = PageSize
             };
 
             return Result.Ok(response);

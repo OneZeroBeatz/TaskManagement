@@ -16,7 +16,7 @@ namespace TaskManagement.Api.Controllers
         }
 
         [HttpGet]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Get(DateTime? startDate, string? title, int page)
         {
             var loggedUserEmail = GetLoggedUserEmail();
@@ -39,7 +39,7 @@ namespace TaskManagement.Api.Controllers
         }
 
         [HttpPost]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Create(CreateDailyListCommand createDailyListCommand)
         {
             //TODO: Separate Controller Action parameter class and mediatR commands
@@ -50,7 +50,7 @@ namespace TaskManagement.Api.Controllers
             var result = await Mediator.Send(createDailyListCommand);
 
             if (result.Success)
-                return Ok();
+                return Ok(result.Value);
 
             return BadRequest(result.ErrorMessage);
         }

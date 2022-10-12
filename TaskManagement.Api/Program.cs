@@ -1,6 +1,7 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
@@ -9,12 +10,19 @@ using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.MessageHandlers;
 using TaskManagement.Application.Repositories;
 using TaskManagement.Application.Vaidations;
+using TaskManagement.Infrastructure.DataAccess;
+using TaskManagement.Infrastructure.DataAccess.Repositories;
 using TaskManagement.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-//var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var dbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContext<TaskManagementDbContext>(options =>
+{
+    options.UseSqlServer(dbConnectionString);
+});
 
 builder.Services.AddMvc().AddSessionStateTempDataProvider();
 builder.Services.AddSession();
@@ -55,7 +63,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

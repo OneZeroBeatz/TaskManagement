@@ -8,7 +8,7 @@ namespace TaskManagement.Api.Controllers.Base
     {
         protected readonly IMediator Mediator;
 
-        public BaseController(IMediator mediator)
+        protected BaseController(IMediator mediator)
         {
             Mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
