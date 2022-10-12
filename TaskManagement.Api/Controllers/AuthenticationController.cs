@@ -1,24 +1,21 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using TaskManagement.Api.Controllers.Base;
 using TaskManagement.Application.Messages;
 
 namespace TaskManagement.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : BaseController
     {
-        public readonly IMediator _mediator;
 
-        public AuthenticationController(IMediator mediator)
-        {
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        }
+        public AuthenticationController(IMediator mediator) : base(mediator) { }
 
         [HttpPost]
         public async Task<ActionResult<string>> Login(LoginCommand loginCommand)
         {
-            var result = await _mediator.Send(loginCommand);
+            var result = await Mediator.Send(loginCommand);
 
             if(result.Success)
                 return Ok(result.Value);
