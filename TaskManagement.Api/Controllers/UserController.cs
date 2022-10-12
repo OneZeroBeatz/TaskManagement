@@ -14,13 +14,13 @@ namespace TaskManagement.Api.Controllers
         public UserController(IMediator mediator) : base(mediator) { }
 
         [HttpPut]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<string>> UpdateTimezone(UpdateTimezoneCommand updateTimezoneCommand)
         {
-            //TODO: Separate Controller Action parameter and mediatR commands
+            //TODO: Separate Controller Action parameter class and mediatR commands
             var loggedUserEmail = GetLoggedUserEmail();
 
-            updateTimezoneCommand.Email = loggedUserEmail;
+            updateTimezoneCommand.UserEmail = loggedUserEmail;
 
             var result = await Mediator.Send(updateTimezoneCommand);
 

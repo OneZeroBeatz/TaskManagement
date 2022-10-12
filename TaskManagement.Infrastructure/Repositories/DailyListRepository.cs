@@ -1,12 +1,11 @@
-﻿using System.Linq;
-using TaskManagement.Application.Repositories;
+﻿using TaskManagement.Application.Repositories;
 using TaskManagement.Domain.Models;
 
 namespace TaskManagement.Infrastructure.Repositories
 {
     public class DailyListRepository : IDailyListRepository
     {
-        public IEnumerable<DailyList> _dailyLists;
+        public List<DailyList> _dailyLists;
 
         public DailyListRepository()
         {
@@ -20,13 +19,20 @@ namespace TaskManagement.Infrastructure.Repositories
             };
         }
 
+        public System.Threading.Tasks.Task Create(DailyList dailyList)
+        {
+            dailyList.Id = _dailyLists.Max(x => x.Id);
+
+            _dailyLists.Add(dailyList);
+            return System.Threading.Tasks.Task.FromResult(true);
+        }
+
         public Task<List<DailyList>> Get(int userId, DateTime date, string title, int page, int pageSize)
         {
             var dailyLists = _dailyLists
                 .Where(x => x.UserId == userId)
                 .Where(x => x.Date == date.Date)
                 .Where(x => x.Title.Contains(title, StringComparison.OrdinalIgnoreCase))
-
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize).ToList();
 

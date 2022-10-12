@@ -29,7 +29,7 @@ namespace TaskManagement.Application.MessageHandlers
 
                 var timezone = TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);
 
-                await _userRepository.UpdateTimezone(request.TimeZoneId, request.Email);
+                await _userRepository.UpdateTimezone(request.TimeZoneId, request.UserEmail);
 
                 return Result.Ok();
             }

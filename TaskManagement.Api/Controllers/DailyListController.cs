@@ -15,9 +15,9 @@ namespace TaskManagement.Api.Controllers
         {
         }
 
-        [HttpGet]//("startDate={startDate}/endDate={endDate}/title={title}/page={page}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<string>> Get(DateTime? startDate, string? title, int page)
+        [HttpGet]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> Get(DateTime? startDate, string? title, int page)
         {
             var loggedUserEmail = GetLoggedUserEmail();
 
@@ -25,17 +25,34 @@ namespace TaskManagement.Api.Controllers
             var query = new GetDailyListsQuery
             {
                 Date = startDate,
-                Title = string.IsNullOrEmpty(title)? string.Empty : title,
+                Title = string.IsNullOrEmpty(title) ? string.Empty : title,
                 UserEmail = loggedUserEmail,
                 Page = page,
             };
 
             var result = await Mediator.Send(query);
 
-            if(result.Success)
+            if (result.Success)
                 return Ok(result.Value);
 
             return BadRequest(result.ErrorMessage);
-        } 
+        }
+
+        [HttpPost]
+        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<ActionResult> Create(CreateDailyListCommand createDailyListCommand)
+        {
+            //TODO: Separate Controller Action parameter class and mediatR commands
+            var loggedUserEmail = GetLoggedUserEmail();
+
+            createDailyListCommand.UserEmail = loggedUserEmail;
+
+            var result = await Mediator.Send(createDailyListCommand);
+
+            if (result.Success)
+                return Ok();
+
+            return BadRequest(result.ErrorMessage);
+        }
     }
 }
