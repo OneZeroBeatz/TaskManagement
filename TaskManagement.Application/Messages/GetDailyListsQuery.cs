@@ -8,5 +8,7 @@ namespace TaskManagement.Application.Messages
     {
         public int Page { get; set; }
         public string UserEmail { get; set; } = string.Empty;
+        public DateTime? Date { get; set; }
+        public string? Title{ get; set; }
     }
 }

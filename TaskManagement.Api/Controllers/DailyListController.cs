@@ -18,17 +18,20 @@ namespace TaskManagement.Api.Controllers
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        [HttpGet("{page}")]
+        [HttpGet]//("startDate={startDate}/endDate={endDate}/title={title}/page={page}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<string>> Get(int page)
+        public async Task<ActionResult<string>> Get(DateTime? startDate, string? title, int page)
         {
             var claimIdentity = HttpContext.User.Identity as ClaimsIdentity;
             var claim = claimIdentity!.FindFirst(ClaimTypes.Email);
 
+            //TODO: Move request generation to factory classes for each controller
             var query = new GetDailyListsQuery
             {
+                Date = startDate,
+                Title = string.IsNullOrEmpty(title)? string.Empty : title,
+                UserEmail = claim!.Value,
                 Page = page,
-                UserEmail = claim!.Value
             };
 
             var result = await _mediator.Send(query);

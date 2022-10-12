@@ -36,14 +36,17 @@ namespace TaskManagement.Application.MessageHandlers
             if (user == null)
                 return Result.Error<GetDailyListsResponse>("User does not exist");
 
-            var totalNumberOfDailyLists = await _dailyListRepository.GetCountForUser(user.Id);
+            var totalNumberOfDailyLists = await _dailyListRepository.GetCount(user.Id, request.Date!.Value, request.Title!);
+
+            if(totalNumberOfDailyLists == 0)
+                return Result.Error<GetDailyListsResponse>("There are no such lists");
 
             var pageCount = Math.Ceiling((double)totalNumberOfDailyLists / PageSize);
 
             if (request.Page > pageCount)
                 return Result.Error<GetDailyListsResponse>("There is no such page");
 
-            var dailyListsForPage = await _dailyListRepository.Get(request.Page, PageSize, user.Id);
+            var dailyListsForPage = await _dailyListRepository.Get(user.Id, request.Date.Value, request.Title!, request.Page, PageSize);
 
             var response = new GetDailyListsResponse()
             {

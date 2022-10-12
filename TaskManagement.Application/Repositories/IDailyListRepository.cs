@@ -4,7 +4,7 @@ namespace TaskManagement.Application.Repositories
 {
     public interface IDailyListRepository
     {
-        Task<List<DailyList>> Get(int page, int pageSize, int userId);
-        Task<int> GetCountForUser(int userId);
+        Task<List<DailyList>> Get(int userId, DateTime date, string title, int page, int pageSize);
+        Task<int> GetCount(int userId, DateTime date, string title);
     }
 }

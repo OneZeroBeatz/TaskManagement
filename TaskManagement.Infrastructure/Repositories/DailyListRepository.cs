@@ -1,4 +1,5 @@
-﻿using TaskManagement.Application.Repositories;
+﻿using System.Linq;
+using TaskManagement.Application.Repositories;
 using TaskManagement.Domain.Models;
 
 namespace TaskManagement.Infrastructure.Repositories
@@ -11,26 +12,34 @@ namespace TaskManagement.Infrastructure.Repositories
         {
             _dailyLists = new List<DailyList>
             {
-                new DailyList(){Id = 1, Description ="dailyListDescription1", Title = "dailyListTitle1", UserId = 1},
-                new DailyList(){Id = 2, Description ="dailyListDescription2", Title = "dailyListTitle2", UserId = 1},
-                new DailyList(){Id = 3, Description ="dailyListDescription3", Title = "dailyListTitle3", UserId = 1},
-                new DailyList(){Id = 4, Description ="dailyListDescription4", Title = "dailyListTitle4", UserId = 2},
-                new DailyList(){Id = 5, Description ="dailyListDescription5", Title = "dailyListTitle5", UserId = 2}
+                new DailyList(){Id = 1, Description ="dailyListDescription1", Title = "dailyListTitle1", UserId = 1, Date = DateTime.UtcNow.Date},
+                new DailyList(){Id = 2, Description ="dailyListDescription2", Title = "dailyListTitle2", UserId = 1, Date = DateTime.UtcNow.Date},
+                new DailyList(){Id = 3, Description ="dailyListDescription3", Title = "dailyListTitle3", UserId = 1, Date = DateTime.UtcNow.Date.AddDays(1)},
+                new DailyList(){Id = 4, Description ="dailyListDescription4", Title = "dailyListTitle4", UserId = 2, Date = DateTime.UtcNow.Date},
+                new DailyList(){Id = 5, Description ="dailyListDescription5", Title = "dailyListTitle5", UserId = 2, Date = DateTime.UtcNow.Date}
             };
         }
 
-        public Task<List<DailyList>> Get(int page, int pageSize, int userId)
+        public Task<List<DailyList>> Get(int userId, DateTime date, string title, int page, int pageSize)
         {
-            var dailyLists = _dailyLists.Where(x => x.UserId == userId)
+            var dailyLists = _dailyLists
+                .Where(x => x.UserId == userId)
+                .Where(x => x.Date == date.Date)
+                .Where(x => x.Title.Contains(title, StringComparison.OrdinalIgnoreCase))
+
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize).ToList();
 
             return System.Threading.Tasks.Task.FromResult(dailyLists);
         }
 
-        public Task<int> GetCountForUser(int userId)
+        public Task<int> GetCount(int userId, DateTime date, string title)
         {
-            var count = _dailyLists.Count(x => x.UserId == userId);
+            var count = _dailyLists
+                .Where(x => x.UserId == userId)
+                .Where(x => x.Date == date.Date)
+                .Where(x => x.Title.Contains(title, StringComparison.OrdinalIgnoreCase))
+                .Count();
 
             return System.Threading.Tasks.Task.FromResult(count);
         }
