@@ -40,7 +40,7 @@ namespace TaskManagement.Api.Controllers
 
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult> Create(CreateDailyListCommand createDailyListCommand)
+        public async Task<ActionResult> Create([FromBody] CreateDailyListCommand createDailyListCommand)
         {
             //TODO: Separate Controller Action parameter class and mediatR commands
             var loggedUserEmail = GetLoggedUserEmail();
@@ -53,6 +53,16 @@ namespace TaskManagement.Api.Controllers
                 return Ok(result.Value);
 
             return BadRequest(result.ErrorMessage);
+        }
+
+        [HttpPut("{id}")]
+        public void Put(int id, [FromBody] UpdateDailyListCommand updateDailyListCommand)
+        {
+        }
+
+        [HttpDelete("{id}")]
+        public void Delete(int id)
+        {
         }
     }
 }

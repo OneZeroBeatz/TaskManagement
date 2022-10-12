@@ -2,21 +2,20 @@
 using MediatR;
 using TaskManagement.Application.Extensions;
 using TaskManagement.Application.Messages;
-using TaskManagement.Application.Messages.Responses;
 using TaskManagement.Application.Repositories;
 using TaskManagement.Domain.Models;
 using TaskManagement.Shared;
 
 namespace TaskManagement.Application.MessageHandlers
 {
-    public class CreateDailyListCommandHandler : IRequestHandler<CreateDailyListCommand, Result<int>>
+    public class UpdateDailyListCommandHandler : IRequestHandler<UpdateDailyListCommand, Result>
     {
         private readonly IUserRepository _userRepository; 
         private readonly IDailyListRepository _dailyListRepository;
-        private readonly IValidator<CreateDailyListCommand> _validator;
+        private readonly IValidator<UpdateDailyListCommand> _validator;
 
-        public CreateDailyListCommandHandler(IUserRepository userRepository,
-                                             IValidator<CreateDailyListCommand> validator,
+        public UpdateDailyListCommandHandler(IUserRepository userRepository,
+                                             IValidator<UpdateDailyListCommand> validator,
                                              IDailyListRepository dailyListRepository)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
@@ -24,11 +23,11 @@ namespace TaskManagement.Application.MessageHandlers
             _dailyListRepository = dailyListRepository ?? throw new ArgumentNullException(nameof(dailyListRepository));
         }
 
-        public async Task<Result<int>> Handle(CreateDailyListCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(UpdateDailyListCommand request, CancellationToken cancellationToken)
         {
             var result = _validator.Validate(request);
             if (!result.IsValid)
-                return result.CreateErrorResult<int>();
+                return result.CreateErrorResult();
 
             var user = await _userRepository.GetByEmail(request.UserEmail);
             if (user == null)
@@ -37,15 +36,16 @@ namespace TaskManagement.Application.MessageHandlers
             //TODO: Create factory
             var dailyList = new DailyList()
             {
+                Id = request.DailyListId,
                 Title = request.Title,
                 Description = request.Description,
                 Date = request.Date,
                 UserId = user.Id
             };
 
-            var dailyListId = await _dailyListRepository.InsertAsync(dailyList);
+            await _dailyListRepository.UpdateAsync(dailyList);
 
-            return Result.Ok(dailyListId);
+            return Result.Ok();
         }
     }
 }

@@ -36,6 +36,13 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
             return dailyList.Id;
         }
 
+        public async System.Threading.Tasks.Task UpdateAsync(DailyList dailyList)
+        {
+            _dbContext.Update(dailyList);
+
+            await _dbContext.SaveChangesAsync();
+        }
+
         private IQueryable<DailyList> GetBy(int userId, DateTime date, string title)
         {
             return _dbContext.DailyLists
