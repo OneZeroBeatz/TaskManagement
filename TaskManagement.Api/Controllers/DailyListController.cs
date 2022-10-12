@@ -72,8 +72,23 @@ namespace TaskManagement.Api.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
+            //TODO: Separate Controller Action parameter class and mediatR commands
+            var loggedUserEmail = GetLoggedUserEmail();
+
+            var deleteDailyListCommand = new DeleteDailyListCommand
+            {
+                DailyListId = id,
+                UserEmail = loggedUserEmail
+            };
+
+            var result = await Mediator.Send(deleteDailyListCommand);
+
+            if (result.Success)
+                return Ok();
+
+            return BadRequest(result.ErrorMessage);
         }
     }
 }

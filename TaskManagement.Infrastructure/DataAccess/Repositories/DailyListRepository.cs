@@ -43,6 +43,13 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
+        public async System.Threading.Tasks.Task DeleteAsync(int id)
+        {
+            var entity = await _dbContext.DailyLists.FindAsync(id);
+            _dbContext.DailyLists.Remove(entity!);
+            await _dbContext.SaveChangesAsync();
+        }
+
         public async Task<bool> Exists(int id)
         {
             return await _dbContext.DailyLists
@@ -58,5 +65,6 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
                 .Where(x => x.Date == date.Date)
                 .Where(x => x.Title.Contains(title)); 
         }
+
     }
 }
