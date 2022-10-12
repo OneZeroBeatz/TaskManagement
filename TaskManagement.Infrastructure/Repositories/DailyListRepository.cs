@@ -21,7 +21,7 @@ namespace TaskManagement.Infrastructure.Repositories
 
         public System.Threading.Tasks.Task Create(DailyList dailyList)
         {
-            dailyList.Id = _dailyLists.Max(x => x.Id);
+            dailyList.Id = _dailyLists.Max(x => x.Id) + 1;
 
             _dailyLists.Add(dailyList);
             return System.Threading.Tasks.Task.FromResult(true);
