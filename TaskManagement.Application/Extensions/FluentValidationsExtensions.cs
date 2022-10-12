@@ -1,5 +1,5 @@
 ﻿using FluentValidation.Results;
-using Invoicing.CrossCutting.Domain;
+using TaskManagement.Shared;
 
 namespace TaskManagement.Application.Extensions;
 public static class FluentValidationExtensions

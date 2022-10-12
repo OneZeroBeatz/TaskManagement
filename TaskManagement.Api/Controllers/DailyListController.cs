@@ -3,36 +3,38 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using System.Security.Principal;
 using TaskManagement.Application.Messages;
 
 namespace TaskManagement.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController : ControllerBase
+    public class DailyListController : ControllerBase
     {
         public readonly IMediator _mediator;
 
-        public UserController(IMediator mediator)
+        public DailyListController(IMediator mediator)
         {
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-        [HttpPut]
+        [HttpGet("{page}")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<string>> UpdateTimezone(UpdateTimezoneCommand updateTimezoneCommand)
+        public async Task<ActionResult<string>> Get(int page)
         {
-            //TODO: Separate Controller Action parameter and mediatR commands
             var claimIdentity = HttpContext.User.Identity as ClaimsIdentity;
             var claim = claimIdentity!.FindFirst(ClaimTypes.Email);
 
-            updateTimezoneCommand.Email = claim!.Value;
+            var query = new GetDailyListsQuery
+            {
+                Page = page,
+                UserEmail = claim!.Value
+            };
 
-            var result = await _mediator.Send(updateTimezoneCommand);
+            var result = await _mediator.Send(query);
 
             if(result.Success)
-                return Ok();
+                return Ok(result.Value);
 
             return BadRequest(result.ErrorMessage);
         } 

@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using Invoicing.CrossCutting.Domain;
 using MediatR;
 using TaskManagement.Application.Extensions;
 using TaskManagement.Application.Messages;
 using TaskManagement.Application.Repositories;
+using TaskManagement.Shared;
 
 namespace TaskManagement.Application.MessageHandlers
 {

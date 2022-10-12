@@ -1,4 +1,4 @@
-﻿namespace Invoicing.CrossCutting.Domain;
+﻿namespace TaskManagement.Shared;
 
 /// <summary>
 /// Wrapper object that holds information of some method result.

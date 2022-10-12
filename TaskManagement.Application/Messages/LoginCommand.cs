@@ -1,5 +1,5 @@
-﻿using Invoicing.CrossCutting.Domain;
-using MediatR;
+﻿using MediatR;
+using TaskManagement.Shared;
 
 namespace TaskManagement.Application.Messages
 {
