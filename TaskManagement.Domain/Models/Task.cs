@@ -7,5 +7,5 @@ public class Task
     public string Description { get; set; } = string.Empty;
     public DateTime Deadline { get; set; }
     public bool Done { get; set; }
-    public int TodoListId { get; set; }
+    public int DailyListId { get; set; }
 }
