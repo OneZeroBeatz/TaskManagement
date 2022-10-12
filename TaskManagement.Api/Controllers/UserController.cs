@@ -14,7 +14,7 @@ namespace TaskManagement.Api.Controllers
         public UserController(IMediator mediator) : base(mediator) { }
 
         [HttpPut]
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<string>> UpdateTimezone(UpdateTimezoneCommand updateTimezoneCommand)
         {
             //TODO: Separate Controller Action parameter class and mediatR commands
