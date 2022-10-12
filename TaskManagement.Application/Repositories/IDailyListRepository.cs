@@ -8,5 +8,6 @@ namespace TaskManagement.Application.Repositories
         Task<List<DailyList>> Get(int userId, DateTime date, string title, int page, int pageSize);
         Task<int> InsertAsync(DailyList dailyList);
         System.Threading.Tasks.Task UpdateAsync(DailyList dailyList);
+        Task<bool> Exists(int id);
     }
 }

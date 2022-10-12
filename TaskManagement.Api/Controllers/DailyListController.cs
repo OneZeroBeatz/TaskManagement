@@ -9,6 +9,7 @@ namespace TaskManagement.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DailyListController : BaseController
     {
         public DailyListController(IMediator mediator) : base(mediator)
@@ -16,7 +17,6 @@ namespace TaskManagement.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Get(DateTime? startDate, string? title, int page)
         {
             var loggedUserEmail = GetLoggedUserEmail();
@@ -39,7 +39,6 @@ namespace TaskManagement.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult> Create([FromBody] CreateDailyListCommand createDailyListCommand)
         {
             //TODO: Separate Controller Action parameter class and mediatR commands
@@ -56,8 +55,20 @@ namespace TaskManagement.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] UpdateDailyListCommand updateDailyListCommand)
+        public async Task<ActionResult> Update(int id, [FromBody] UpdateDailyListCommand updateDailyListCommand)
         {
+            //TODO: Separate Controller Action parameter class and mediatR commands
+            var loggedUserEmail = GetLoggedUserEmail();
+
+            updateDailyListCommand.UserEmail = loggedUserEmail;
+            updateDailyListCommand.DailyListId = id;
+
+            var result = await Mediator.Send(updateDailyListCommand);
+
+            if (result.Success)
+                return Ok();
+
+            return BadRequest(result.ErrorMessage);
         }
 
         [HttpDelete("{id}")]

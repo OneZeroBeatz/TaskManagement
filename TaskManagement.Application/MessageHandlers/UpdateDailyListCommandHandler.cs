@@ -31,7 +31,12 @@ namespace TaskManagement.Application.MessageHandlers
 
             var user = await _userRepository.GetByEmail(request.UserEmail);
             if (user == null)
-                return Result.Error<int>("User does not exist");
+                return Result.Error<int>("User does not exist.");
+
+            var dailyListExists = await _dailyListRepository.Exists(request.DailyListId);
+
+            if (!dailyListExists)
+                return Result.Error<int>("Daily list does not exist.");
 
             //TODO: Create factory
             var dailyList = new DailyList()
