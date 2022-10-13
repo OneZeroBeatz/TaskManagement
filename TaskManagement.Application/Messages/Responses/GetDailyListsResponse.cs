@@ -1,4 +1,4 @@
-﻿using TaskManagement.Domain.Models;
+﻿using TaskManagement.Application.Messages.Responses.Dtos;
 
 namespace TaskManagement.Application.Messages.Responses
 {
@@ -7,7 +7,6 @@ namespace TaskManagement.Application.Messages.Responses
         public int Page { get; set; }
         public int PageCount { get; set; }
         public int PageSize { get; set; }
-        //TODO: Consider using different DailyList class for response, adapted for this usage
-        public List<DailyList> DailyLists { get; set; }
+        public List<DailyListDto> DailyLists { get; set; } = new();
     }
 }

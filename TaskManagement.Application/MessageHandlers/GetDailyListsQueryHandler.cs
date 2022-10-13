@@ -43,7 +43,7 @@ namespace TaskManagement.Application.MessageHandlers
 
             var response = new GetDailyListsResponse()
             {
-                DailyLists = dailyListsForPage,
+                //DailyLists = dailyListsForPage,
                 Page = request.Page,
                 PageCount = (int)pageCount,
                 PageSize = PageSize

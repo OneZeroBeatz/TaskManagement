@@ -2,6 +2,8 @@
 using MediatR;
 using TaskManagement.Api.Controllers;
 using TaskManagement.Application.Extensions;
+using TaskManagement.Application.Interfaces;
+using TaskManagement.Application.Messages.Responses.Dtos;
 using TaskManagement.Application.Messages.Tasks;
 using TaskManagement.Application.Repositories;
 using TaskManagement.Shared;
@@ -14,16 +16,19 @@ namespace TaskManagement.Application.MessageHandlers
         private readonly IUserRepository _userRepository;
         private readonly IDailyListRepository _dailyListRepository;
         private readonly IValidator<GetTasksForDailyListQuery> _validator;
+        private readonly IGetTasksForDailyListResponseFactory _getTasksForDailyListResponseFactory;
 
         public GetTasksForDailyListQueryHandler(ITaskRepository taskRepository,
                                                 IValidator<GetTasksForDailyListQuery> validator,
-                                                IDailyListRepository dailyListRepository, 
-                                                IUserRepository userRepository)
+                                                IDailyListRepository dailyListRepository,
+                                                IUserRepository userRepository, 
+                                                IGetTasksForDailyListResponseFactory getTasksForDailyListResponseFactory)
         {
             _taskRepository = taskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
             _dailyListRepository = dailyListRepository ?? throw new ArgumentNullException(nameof(dailyListRepository));
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+            _getTasksForDailyListResponseFactory = getTasksForDailyListResponseFactory ?? throw new ArgumentNullException(nameof(getTasksForDailyListResponseFactory));
         }
 
         public async Task<Result<GetTasksForDailyListResponse>> Handle(GetTasksForDailyListQuery request, CancellationToken cancellationToken)
@@ -44,23 +49,10 @@ namespace TaskManagement.Application.MessageHandlers
 
             var tasks = await _taskRepository.Get(request.DailyListId, request.Done, deadlineTimeLimitUtc);
 
-            UpdateDeadlineToTimezone(tasks, timezoneInfo);
-
-            var response = new GetTasksForDailyListResponse
-            {
-                Tasks = tasks
-            };
+            var response = _getTasksForDailyListResponseFactory.GenerateResponse(tasks, timezoneInfo);
 
             return Result.Ok(response);
         }
 
-        //TODO: Create new model for response, avoiding deadline property value replacing
-        private void UpdateDeadlineToTimezone(List<Domain.Models.Task> tasks, TimeZoneInfo timezoneInfo)
-        {
-            foreach (var task in tasks)
-            {
-                task.Deadline = TimeZoneInfo.ConvertTimeFromUtc(task.Deadline, timezoneInfo);
-            }
-        }
     }
 }
