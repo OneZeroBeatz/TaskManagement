@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Api.Controllers.Base;
+using TaskManagement.Api.Requests;
 using TaskManagement.Application.Messages;
 
 namespace TaskManagement.Api.Controllers
@@ -15,12 +16,16 @@ namespace TaskManagement.Api.Controllers
 
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<ActionResult<string>> UpdateTimezone(UpdateTimezoneCommand updateTimezoneCommand)
+        public async Task<ActionResult<string>> UpdateTimezone([FromBody] UpdateTimezoneRequest updateTimezonRequest)
         {
-            //TODO: Separate Controller Action parameter class and mediatR commands
             var loggedUserEmail = GetLoggedUserEmail();
 
-            updateTimezoneCommand.UserEmail = loggedUserEmail;
+            //TODO: Move request generation to factory classes for each controller
+            var updateTimezoneCommand = new UpdateTimezoneCommand
+            {
+                UserEmail = loggedUserEmail,
+                TimeZoneId = updateTimezonRequest.TimeZoneId
+            };
 
             var result = await Mediator.Send(updateTimezoneCommand);
 

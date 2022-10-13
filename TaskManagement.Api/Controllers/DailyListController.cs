@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Api.Controllers.Base;
+using TaskManagement.Api.Requests;
 using TaskManagement.Application.Messages;
 
 namespace TaskManagement.Api.Controllers
@@ -12,9 +13,7 @@ namespace TaskManagement.Api.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DailyListController : BaseController
     {
-        public DailyListController(IMediator mediator) : base(mediator)
-        {
-        }
+        public DailyListController(IMediator mediator) : base(mediator) { }
 
         [HttpGet]
         public async Task<ActionResult> Get(DateTime? startDate, string? title, int page)
@@ -39,10 +38,18 @@ namespace TaskManagement.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create([FromBody] CreateDailyListCommand createDailyListCommand)
+        public async Task<ActionResult> Create([FromBody] CreateDailyListRequest createDailyListRequest)
         {
-            //TODO: Separate Controller Action parameter class and mediatR commands
             var loggedUserEmail = GetLoggedUserEmail();
+
+            //TODO: Move request generation to factory classes for each controller
+            var createDailyListCommand = new CreateDailyListCommand
+            {
+                UserEmail = loggedUserEmail,
+                Date = createDailyListRequest.Date,
+                Title = createDailyListRequest.Title,
+                Description = createDailyListRequest.Description,
+            };
 
             createDailyListCommand.UserEmail = loggedUserEmail;
 
@@ -55,13 +62,19 @@ namespace TaskManagement.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] UpdateDailyListCommand updateDailyListCommand)
+        public async Task<ActionResult> Update(int id, [FromBody] UpdateDailyListRequest updateDailyListRequest)
         {
-            //TODO: Separate Controller Action parameter class and mediatR commands
             var loggedUserEmail = GetLoggedUserEmail();
 
-            updateDailyListCommand.UserEmail = loggedUserEmail;
-            updateDailyListCommand.DailyListId = id;
+            //TODO: Move request generation to factory classes for each controller
+            var updateDailyListCommand = new UpdateDailyListCommand
+            {
+                Title = updateDailyListRequest.Title,
+                Date = updateDailyListRequest.Date,
+                Description = updateDailyListRequest.Description,
+                DailyListId = id,
+                UserEmail = loggedUserEmail
+            };
 
             var result = await Mediator.Send(updateDailyListCommand);
 
@@ -74,9 +87,9 @@ namespace TaskManagement.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            //TODO: Separate Controller Action parameter class and mediatR commands
             var loggedUserEmail = GetLoggedUserEmail();
 
+            //TODO: Move request generation to factory classes for each controller
             var deleteDailyListCommand = new DeleteDailyListCommand
             {
                 DailyListId = id,
