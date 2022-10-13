@@ -35,7 +35,7 @@ namespace TaskManagement.Application.MessageHandlers
             var listExists = await _dailyListRepository.Exists(request.DailyListId, request.UserId);
 
             if (!listExists)
-                Result.Error("Daily list does not exist.");
+                return Result.Error<GetTasksForDailyListResponse>("Daily list does not exist.");
 
             string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId);
             var timezoneInfo = TimeZoneInfo.FindSystemTimeZoneById(userTimezoneId);
