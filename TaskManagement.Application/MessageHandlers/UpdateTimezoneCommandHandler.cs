@@ -27,6 +27,7 @@ namespace TaskManagement.Application.MessageHandlers
                 if (!result.IsValid)
                     return result.CreateErrorResult();
 
+                //TODO: Move to fluent validator
                 TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);
 
                 await _userRepository.UpdateTimezone(request.TimeZoneId, request.UserId);

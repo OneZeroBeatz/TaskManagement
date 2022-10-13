@@ -7,7 +7,7 @@ namespace TaskManagement.Application.Vaidations
     {
         public UpdateTimezoneCommandValidator()
         {
-            RuleFor(command => command.TimeZoneId).NotNull().NotEmpty();
+            RuleFor(command => command.TimeZoneId).NotNull().NotEmpty().MaximumLength(50);
         }
     }
 }
