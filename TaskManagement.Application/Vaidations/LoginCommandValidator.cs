@@ -7,8 +7,16 @@ namespace TaskManagement.Application.Vaidations
     {
         public LoginCommandValidator()
         {
-            RuleFor(command => command.Password).NotNull().NotEmpty();
-            RuleFor(command => command.Email).NotNull().NotEmpty();
+            RuleFor(command => command.Password)
+                .NotNull()
+                .NotEmpty()
+                .MaximumLength(50);
+
+            RuleFor(command => command.Email)
+                .NotNull()
+                .NotEmpty()
+                .EmailAddress()
+                .MaximumLength(50);
         }
     }
 }
