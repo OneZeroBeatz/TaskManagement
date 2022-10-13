@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskManagement.Application.Repositories;
-using TaskManagement.Domain.Models;
 
 namespace TaskManagement.Infrastructure.DataAccess.Repositories
 {
@@ -45,21 +44,11 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        //public async System.Threading.Tasks.Task DeleteAsync(int id)
-        //{
-        //    var entity = await _dbContext.DailyLists.FindAsync(id);
-        //    _dbContext.DailyLists.Remove(entity!);
-        //    await _dbContext.SaveChangesAsync();
-        //}
-        //
-        //public async Task<bool> Exists(int id, int userId)
-        //{
-        //    return await _dbContext.DailyLists
-        //        .AsNoTracking()
-        //        .Where(x=>x.Id == id)
-        //        .Where(x=>x.UserId == userId)
-        //        .AnyAsync();
-        //}
-
+        public async System.Threading.Tasks.Task DeleteAsync(int id)
+        {
+            var entity = await _dbContext.Tasks.FindAsync(id);
+            _dbContext.Tasks.Remove(entity!);
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -104,5 +104,25 @@ namespace TaskManagement.Api.Controllers
 
             return BadRequest(result.ErrorMessage);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var loggedUserId = GetLoggedUserId();
+
+            //TODO: Move request generation to factory classes for each controller
+            var deleteDailyListCommand = new DeleteTaskCommand
+            {
+                TaskId = id,
+                UserId = loggedUserId
+            };
+
+            var result = await Mediator.Send(deleteDailyListCommand);
+
+            if (result.Success)
+                return Ok();
+
+            return BadRequest(result.ErrorMessage);
+        }
     }
 }
