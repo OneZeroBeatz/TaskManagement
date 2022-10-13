@@ -1,11 +1,9 @@
-﻿namespace TaskManagement.Application.Repositories
+﻿using TaskManagement.Infrastructure.DataAccess.Repositories.Base;
+
+namespace TaskManagement.Application.Repositories
 {
-    public interface ITaskRepository
+    public interface ITaskRepository: IRepository<Domain.Models.Task>
     {
         Task<List<Domain.Models.Task>> Get(int dailyListId, bool done, DateTime? deadlineLimit);
-        Task<int> InsertAsync(Domain.Models.Task task);
-        Task<Domain.Models.Task?> Find(int taskId);
-        Task UpdateAsync(Domain.Models.Task task);
-        Task DeleteAsync(int id);
     }
 }

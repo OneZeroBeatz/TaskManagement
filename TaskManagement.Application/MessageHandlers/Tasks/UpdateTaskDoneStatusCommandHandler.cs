@@ -28,7 +28,7 @@ namespace TaskManagement.Application.MessageHandlers
             if (!result.IsValid)
                 return result.CreateErrorResult();
 
-            var task = await _taskRepository.Find(request.TaskId);
+            var task = await _taskRepository.FindAsync(request.TaskId);
 
             if(task == null)
                 return Result.Error("Task does not exist.");

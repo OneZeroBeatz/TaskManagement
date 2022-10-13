@@ -33,7 +33,7 @@ namespace TaskManagement.Api
 
             var userId = int.Parse(claim.Value);
 
-            var user = await emailRepository.GetById(userId);
+            var user = await emailRepository.FindAsync(userId);
 
             if (user == null)
             {

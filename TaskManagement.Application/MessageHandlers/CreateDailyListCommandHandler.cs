@@ -35,9 +35,9 @@ namespace TaskManagement.Application.MessageHandlers
                 UserId = request.UserId
             };
 
-            var dailyListId = await _dailyListRepository.InsertAsync(dailyList);
+            dailyList = await _dailyListRepository.InsertAsync(dailyList);
 
-            return Result.Ok(dailyListId);
+            return Result.Ok(dailyList.Id);
         }
     }
 }

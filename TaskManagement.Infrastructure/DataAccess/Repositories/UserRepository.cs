@@ -2,40 +2,24 @@
 using TaskManagement.Application.Repositories;
 using TaskManagement.Domain.Models;
 using TaskManagement.Infrastructure.DataAccess;
+using TaskManagement.Infrastructure.DataAccess.Repositories.Base;
 
 namespace TaskManagement.Infrastructure.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        private readonly TaskManagementDbContext _dbContext;
-
-        public UserRepository(TaskManagementDbContext dbContext)
+        public UserRepository(TaskManagementDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
-        public async Task<User?> GetById(int id)
-        {
-            return await _dbContext.Users.FindAsync(id);
-        }
         public Task<User?> GetByEmail(string email)
         {
-            return _dbContext.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
-        }
-
-        public async System.Threading.Tasks.Task UpdateTimezone(string timeZoneId, int userId)
-        {
-            var user = await _dbContext.Users.FindAsync(userId);
-            user!.TimeZoneId = timeZoneId;
-
-            _dbContext.Update(user);
-
-            await _dbContext.SaveChangesAsync();
+            return DbContext.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
         }
 
         public async Task<string> GetTimezoneId(int userId)
         {
-            return await _dbContext.Users
+            return await DbContext.Users
                 .Where(x => x.Id == userId)
                 .Select(x => x.TimeZoneId)
                 .FirstAsync();

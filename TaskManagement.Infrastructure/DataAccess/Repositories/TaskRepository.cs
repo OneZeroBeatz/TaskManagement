@@ -1,26 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskManagement.Application.Repositories;
+using TaskManagement.Infrastructure.DataAccess.Repositories.Base;
 
 namespace TaskManagement.Infrastructure.DataAccess.Repositories
 {
-    public class TaskRepository : ITaskRepository
+    public class TaskRepository : BaseRepository<Domain.Models.Task>, ITaskRepository
     {
-        private readonly TaskManagementDbContext _dbContext;
-
-        public TaskRepository(TaskManagementDbContext dbContext)
+        public TaskRepository(TaskManagementDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        }
-
-        public async Task<Domain.Models.Task?> Find(int taskId)
-        {
-            return await _dbContext.Tasks.FindAsync(taskId);
         }
 
         //TODO: Remove nullable from datetime
         public Task<List<Domain.Models.Task>> Get(int dailyListId, bool done, DateTime? deadlineLimit)
         {
-            var tasks = _dbContext.Tasks
+            var tasks = DbContext.Tasks
                 .AsNoTracking()
                 .Where(x => x.DailyListId == dailyListId)
                 .Where(x => x.Deadline < deadlineLimit)
@@ -28,27 +21,6 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
                 .ToListAsync();
 
             return tasks;
-        }
-
-        public async Task<int> InsertAsync(Domain.Models.Task task)
-        {
-            _dbContext.Add(task);
-            await _dbContext.SaveChangesAsync();
-            return task.Id;
-        }
-
-        public async System.Threading.Tasks.Task UpdateAsync(Domain.Models.Task task)
-        {
-            _dbContext.Update(task);
-        
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async System.Threading.Tasks.Task DeleteAsync(int id)
-        {
-            var entity = await _dbContext.Tasks.FindAsync(id);
-            _dbContext.Tasks.Remove(entity!);
-            await _dbContext.SaveChangesAsync();
         }
     }
 }

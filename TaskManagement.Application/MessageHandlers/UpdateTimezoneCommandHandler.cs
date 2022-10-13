@@ -27,10 +27,13 @@ namespace TaskManagement.Application.MessageHandlers
                 if (!result.IsValid)
                     return result.CreateErrorResult();
 
+                var user = await _userRepository.FindAsync(request.UserId);
+
                 //TODO: Move to fluent validator
                 TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);
 
-                await _userRepository.UpdateTimezone(request.TimeZoneId, request.UserId);
+                user!.TimeZoneId = request.TimeZoneId;
+                await _userRepository.UpdateAsync(user);
 
                 return Result.Ok();
             }

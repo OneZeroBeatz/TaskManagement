@@ -1,12 +1,11 @@
 ﻿using TaskManagement.Domain.Models;
+using TaskManagement.Infrastructure.DataAccess.Repositories.Base;
 
 namespace TaskManagement.Application.Repositories
 {
-    public interface IUserRepository
+    public interface IUserRepository : IRepository<User>
     {
-        Task<User?> GetById(int id);
         Task<User?> GetByEmail(string email);
-        System.Threading.Tasks.Task UpdateTimezone(string timeZoneId, int userId);
         Task<string> GetTimezoneId(int userId);
     }
 }

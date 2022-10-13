@@ -85,7 +85,7 @@ namespace TaskManagement.Api.Controllers
         }
 
         [HttpPut("Done/{id}")]
-        public async Task<ActionResult> Update(int id, [FromBody] bool done)
+        public async Task<ActionResult> Update(int id, [FromBody] UpdateTaskDoneStatusRequest updateTaskDoneStatusRequest)
         {
             var userId = GetLoggedUserId();
 
@@ -94,7 +94,7 @@ namespace TaskManagement.Api.Controllers
             {
                 TaskId = id,
                 UserId = userId,
-                Done = done
+                Done = updateTaskDoneStatusRequest.Done
             };
 
             var result = await Mediator.Send(updateDoneStatusCommand);

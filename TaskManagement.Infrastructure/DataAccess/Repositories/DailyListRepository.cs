@@ -1,16 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TaskManagement.Application.Repositories;
 using TaskManagement.Domain.Models;
+using TaskManagement.Infrastructure.DataAccess.Repositories.Base;
 
 namespace TaskManagement.Infrastructure.DataAccess.Repositories
 {
-    public class DailyListRepository : IDailyListRepository
+    public class DailyListRepository : BaseRepository<DailyList>, IDailyListRepository
     {
-        private readonly TaskManagementDbContext _dbContext;
-
-        public DailyListRepository(TaskManagementDbContext dbContext)
+        public DailyListRepository(TaskManagementDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
         public Task<List<DailyList>> Get(int userId, DateTime date, string title, int page, int pageSize)
@@ -29,30 +27,9 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
             return count;
         }
 
-        public async Task<int> InsertAsync(DailyList dailyList)
-        {
-            _dbContext.Add(dailyList);
-            await _dbContext.SaveChangesAsync();
-            return dailyList.Id;
-        }
-
-        public async System.Threading.Tasks.Task UpdateAsync(DailyList dailyList)
-        {
-            _dbContext.Update(dailyList);
-
-            await _dbContext.SaveChangesAsync();
-        }
-
-        public async System.Threading.Tasks.Task DeleteAsync(int id)
-        {
-            var entity = await _dbContext.DailyLists.FindAsync(id);
-            _dbContext.DailyLists.Remove(entity!);
-            await _dbContext.SaveChangesAsync();
-        }
-
         public async Task<bool> Exists(int id, int userId)
         {
-            return await _dbContext.DailyLists
+            return await DbContext.DailyLists
                 .AsNoTracking()
                 .Where(x=>x.Id == id)
                 .Where(x=>x.UserId == userId)
@@ -61,7 +38,7 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
 
         private IQueryable<DailyList> GetBy(int userId, DateTime date, string title)
         {
-            return _dbContext.DailyLists
+            return DbContext.DailyLists
                 .AsNoTracking()
                 .Where(x => x.UserId == userId)
                 .Where(x => x.Date == date.Date)

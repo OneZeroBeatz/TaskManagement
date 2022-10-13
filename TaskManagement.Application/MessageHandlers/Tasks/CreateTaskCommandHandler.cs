@@ -49,9 +49,9 @@ namespace TaskManagement.Application.MessageHandlers
                 Done = false,
             };
 
-            var taskId = await _taskRepository.InsertAsync(task);
+            task = await _taskRepository.InsertAsync(task);
 
-            return Result.Ok(taskId);
+            return Result.Ok(task.Id);
         }
     }
 }
