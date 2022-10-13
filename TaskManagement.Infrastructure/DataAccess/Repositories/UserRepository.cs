@@ -23,9 +23,9 @@ namespace TaskManagement.Infrastructure.Repositories
             return _dbContext.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
         }
 
-        public async System.Threading.Tasks.Task UpdateTimezone(string timeZoneId, string email)
+        public async System.Threading.Tasks.Task UpdateTimezone(string timeZoneId, int userId)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
+            var user = await _dbContext.Users.FindAsync(userId);
             user!.TimeZoneId = timeZoneId;
 
             _dbContext.Update(user);
