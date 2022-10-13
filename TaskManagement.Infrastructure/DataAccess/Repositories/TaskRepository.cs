@@ -25,13 +25,13 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
             return tasks;
         }
 
-        //public async Task<int> InsertAsync(DailyList dailyList)
-        //{
-        //    _dbContext.Add(dailyList);
-        //    await _dbContext.SaveChangesAsync();
-        //    return dailyList.Id;
-        //}
-        //
+        public async Task<int> InsertAsync(Domain.Models.Task task)
+        {
+            _dbContext.Add(task);
+            await _dbContext.SaveChangesAsync();
+            return task.Id;
+        }
+
         //public async System.Threading.Tasks.Task UpdateAsync(DailyList dailyList)
         //{
         //    _dbContext.Update(dailyList);

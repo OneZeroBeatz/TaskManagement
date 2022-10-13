@@ -59,7 +59,7 @@ namespace TaskManagement.Application.MessageHandlers
         {
             foreach (var task in tasks)
             {
-                task.Deadline = TimeZoneInfo.ConvertTimeToUtc(task.Deadline, timezoneInfo);
+                task.Deadline = TimeZoneInfo.ConvertTimeFromUtc(task.Deadline, timezoneInfo);
             }
         }
     }
