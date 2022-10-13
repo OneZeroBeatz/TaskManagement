@@ -8,4 +8,6 @@ public class DailyList
     //TODO: Consider using DateOnly
     public DateTime Date { get; set; } = DateTime.UtcNow;
     public int UserId { get; set; }
+    public User User { get; set; }
+    public List<Task> Tasks { get; set; } = new();
 }

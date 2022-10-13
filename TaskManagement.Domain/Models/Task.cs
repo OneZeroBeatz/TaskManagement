@@ -8,4 +8,5 @@ public class Task
     public DateTime Deadline { get; set; }
     public bool Done { get; set; }
     public int DailyListId { get; set; }
+    public DailyList DailyList { get; set; }
 }
