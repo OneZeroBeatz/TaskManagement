@@ -18,7 +18,7 @@ namespace TaskManagement.Application.MessageHandlers
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
-
+        //TODO: Add exception handling filter
         public async Task<Result> Handle(UpdateTimezoneCommand request, CancellationToken cancellationToken)
         {
             try

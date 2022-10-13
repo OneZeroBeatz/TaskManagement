@@ -4,7 +4,6 @@ using TaskManagement.Application.Extensions;
 using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.Messages;
 using TaskManagement.Application.Messages.Responses;
-using TaskManagement.Application.Messages.Responses.Dtos;
 using TaskManagement.Application.Repositories;
 using TaskManagement.Shared;
 
@@ -50,6 +49,5 @@ namespace TaskManagement.Application.MessageHandlers
 
             return Result.Ok(response);
         }
-
     }
 }
