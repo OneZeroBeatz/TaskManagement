@@ -12,6 +12,12 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
+
+        public async Task<Domain.Models.Task?> Find(int taskId)
+        {
+            return await _dbContext.Tasks.FindAsync(taskId);
+        }
+
         //TODO: Remove nullable from datetime
         public Task<List<Domain.Models.Task>> Get(int dailyListId, bool done, DateTime? deadlineLimit)
         {
@@ -32,13 +38,13 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
             return task.Id;
         }
 
-        //public async System.Threading.Tasks.Task UpdateAsync(DailyList dailyList)
-        //{
-        //    _dbContext.Update(dailyList);
-        //
-        //    await _dbContext.SaveChangesAsync();
-        //}
-        //
+        public async System.Threading.Tasks.Task UpdateAsync(Domain.Models.Task task)
+        {
+            _dbContext.Update(task);
+        
+            await _dbContext.SaveChangesAsync();
+        }
+
         //public async System.Threading.Tasks.Task DeleteAsync(int id)
         //{
         //    var entity = await _dbContext.DailyLists.FindAsync(id);

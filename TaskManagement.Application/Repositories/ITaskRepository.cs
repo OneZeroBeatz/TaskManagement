@@ -6,7 +6,9 @@ namespace TaskManagement.Application.Repositories
     {
         Task<List<Domain.Models.Task>> Get(int dailyListId, bool done, DateTime? deadlineLimit);
         Task<int> InsertAsync(Domain.Models.Task task);
-        //System.Threading.Tasks.Task UpdateAsync(DailyList dailyList);
+        Task<Domain.Models.Task?> Find(int taskId);
+        System.Threading.Tasks.Task UpdateAsync(Domain.Models.Task task);
+
         //System.Threading.Tasks.Task DeleteAsync(int id);
         //Task<bool> Exists(int id, int userId);
     }

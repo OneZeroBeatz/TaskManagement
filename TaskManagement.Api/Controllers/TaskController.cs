@@ -60,5 +60,29 @@ namespace TaskManagement.Api.Controllers
 
             return BadRequest(result.ErrorMessage);
         }
+
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(int id, [FromBody] UpdateTaskRequest updateTaskRequest)
+        {
+            var userId = GetLoggedUserId();
+
+            //TODO: Move request generation to factory classes for each controller
+            var updateTaskCommand = new UpdateTaskCommand
+            {
+                TaskId = id,
+                UserId = userId,
+                Deadline = updateTaskRequest.Deadline,
+                Title = updateTaskRequest.Title,
+                Description = updateTaskRequest.Description
+            };
+
+            var result = await Mediator.Send(updateTaskCommand);
+
+            if (result.Success)
+                return Ok();
+
+            return BadRequest(result.ErrorMessage);
+        }
     }
 }
