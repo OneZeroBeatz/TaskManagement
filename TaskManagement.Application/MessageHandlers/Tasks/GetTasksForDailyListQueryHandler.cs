@@ -3,7 +3,6 @@ using MediatR;
 using TaskManagement.Api.Controllers;
 using TaskManagement.Application.Extensions;
 using TaskManagement.Application.Interfaces;
-using TaskManagement.Application.Messages.Responses.Dtos;
 using TaskManagement.Application.Messages.Tasks;
 using TaskManagement.Application.Repositories;
 using TaskManagement.Shared;

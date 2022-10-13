@@ -2,9 +2,16 @@
 
 public class DailyListDto
 {
-    public int Id { get; set; }
-    public string Title { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
-    //TODO: Consider using DateOnly
-    public DateTime Date { get; set; } = DateTime.UtcNow;
+    public int Id { get; private set; }
+    public string Title { get; private set; }
+    public string Description { get; private set; }
+    public DateTime Date { get; private set; }
+
+    public DailyListDto(int id, string title, string description, DateTime date)
+    {
+        Id = id;
+        Title = title;
+        Description = description;
+        Date = date;
+    }
 }
