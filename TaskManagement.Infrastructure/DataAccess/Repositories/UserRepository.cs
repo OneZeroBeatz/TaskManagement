@@ -32,5 +32,13 @@ namespace TaskManagement.Infrastructure.Repositories
 
             await _dbContext.SaveChangesAsync();
         }
+
+        public async Task<string> GetTimezoneId(int userId)
+        {
+            return await _dbContext.Users
+                .Where(x => x.Id == userId)
+                .Select(x => x.TimeZoneId)
+                .FirstAsync();
+        }
     }
 }

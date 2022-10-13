@@ -7,5 +7,6 @@ namespace TaskManagement.Application.Repositories
         Task<User?> GetById(int id);
         Task<User?> GetByEmail(string email);
         System.Threading.Tasks.Task UpdateTimezone(string timeZoneId, int userId);
+        Task<string> GetTimezoneId(int userId);
     }
 }

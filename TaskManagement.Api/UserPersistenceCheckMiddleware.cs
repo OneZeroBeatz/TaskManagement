@@ -35,7 +35,7 @@ namespace TaskManagement.Api
 
             var user = await emailRepository.GetById(userId);
 
-            if (user != null)
+            if (user == null)
             {
                 httpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 httpContext.Response.ContentType = "text/plain";
