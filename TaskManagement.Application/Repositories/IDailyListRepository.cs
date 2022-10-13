@@ -9,6 +9,6 @@ namespace TaskManagement.Application.Repositories
         Task<int> InsertAsync(DailyList dailyList);
         System.Threading.Tasks.Task UpdateAsync(DailyList dailyList);
         System.Threading.Tasks.Task DeleteAsync(int id);
-        Task<bool> Exists(int id);
+        Task<bool> Exists(int id, int userId);
     }
 }

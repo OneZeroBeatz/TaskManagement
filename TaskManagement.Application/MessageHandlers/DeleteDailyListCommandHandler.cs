@@ -25,7 +25,7 @@ namespace TaskManagement.Application.MessageHandlers
             if (!result.IsValid)
                 return result.CreateErrorResult();
 
-            var dailyListExists = await _dailyListRepository.Exists(request.DailyListId);
+            var dailyListExists = await _dailyListRepository.Exists(request.DailyListId, request.UserId);
 
             if (!dailyListExists)
                 return Result.Error<int>("Daily list does not exist.");

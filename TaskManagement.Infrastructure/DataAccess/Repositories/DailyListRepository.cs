@@ -50,11 +50,13 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<bool> Exists(int id)
+        public async Task<bool> Exists(int id, int userId)
         {
             return await _dbContext.DailyLists
                 .AsNoTracking()
-                .AnyAsync(x => x.Id == id);
+                .Where(x=>x.Id == id)
+                .Where(x=>x.UserId == userId)
+                .AnyAsync();
         }
 
         private IQueryable<DailyList> GetBy(int userId, DateTime date, string title)
