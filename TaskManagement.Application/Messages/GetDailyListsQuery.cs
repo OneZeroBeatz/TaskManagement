@@ -7,7 +7,7 @@ namespace TaskManagement.Application.Messages
     public class GetDailyListsQuery : IRequest<Result<GetDailyListsResponse>>
     {
         public int Page { get; set; }
-        public string UserEmail { get; set; } = string.Empty;
+        public int UserId { get; set; }
         public DateTime? Date { get; set; }
         public string? Title{ get; set; }
     }

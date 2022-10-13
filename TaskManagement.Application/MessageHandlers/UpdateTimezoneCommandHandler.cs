@@ -27,7 +27,7 @@ namespace TaskManagement.Application.MessageHandlers
                 if (!result.IsValid)
                     return result.CreateErrorResult();
 
-                var timezone = TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);
+                TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);
 
                 await _userRepository.UpdateTimezone(request.TimeZoneId, request.UserEmail);
 

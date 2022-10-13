@@ -7,7 +7,7 @@ namespace TaskManagement.Application.Vaidations
     {
         public GetDailyListsQueryValidator()
         {
-            RuleFor(command => command.UserEmail).NotNull().NotEmpty();
+            RuleFor(command => command.UserId).NotNull().NotEmpty();
             RuleFor(command => command.Page).GreaterThan(0);
             RuleFor(command => command.Date).NotNull();
             RuleFor(command => command.Title).NotNull();

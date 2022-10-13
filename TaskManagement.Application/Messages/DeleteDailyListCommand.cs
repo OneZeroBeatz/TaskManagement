@@ -6,6 +6,6 @@ namespace TaskManagement.Application.Messages
     public class DeleteDailyListCommand : IRequest<Result>
     {
         public int DailyListId { get; set; }
-        public string UserEmail { get; set; } = string.Empty;
+        public int UserId { get; set; }
     }
 }

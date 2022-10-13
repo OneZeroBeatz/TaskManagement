@@ -7,7 +7,7 @@ namespace TaskManagement.Application.Vaidations
     {
         public DeleteDailyListCommandValidator()
         {
-            RuleFor(command => command.UserEmail).NotNull().NotEmpty();
+            RuleFor(command => command.UserId).NotNull().NotEmpty();
         }
     }
 }

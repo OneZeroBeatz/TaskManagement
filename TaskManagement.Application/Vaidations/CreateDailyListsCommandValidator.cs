@@ -7,7 +7,7 @@ namespace TaskManagement.Application.Vaidations
     {
         public CreateDailyListCommandValidator()
         {
-            RuleFor(command => command.UserEmail).NotNull().NotEmpty();
+            RuleFor(command => command.UserId).NotNull().NotEmpty();
             RuleFor(command => command.Date).NotNull();
             RuleFor(command => command.Title).NotNull();
             RuleFor(command => command.Description).NotNull();

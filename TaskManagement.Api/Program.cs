@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
+using TaskManagement.Api;
 using TaskManagement.Application.Factories;
 using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.MessageHandlers;
@@ -67,6 +68,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseAuthentication();
+
+app.UseUserPersistenceCheck();
 
 app.MapControllers();
 

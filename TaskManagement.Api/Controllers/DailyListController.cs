@@ -18,14 +18,14 @@ namespace TaskManagement.Api.Controllers
         [HttpGet]
         public async Task<ActionResult> Get(DateTime? startDate, string? title, int page)
         {
-            var loggedUserEmail = GetLoggedUserEmail();
+            var userId = GetLoggedUserId();
 
             //TODO: Move request generation to factory classes for each controller
             var query = new GetDailyListsQuery
             {
                 Date = startDate,
                 Title = string.IsNullOrEmpty(title) ? string.Empty : title,
-                UserEmail = loggedUserEmail,
+                UserId = userId,
                 Page = page,
             };
 
@@ -40,18 +40,16 @@ namespace TaskManagement.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateDailyListRequest createDailyListRequest)
         {
-            var loggedUserEmail = GetLoggedUserEmail();
+            var userId = GetLoggedUserId();
 
             //TODO: Move request generation to factory classes for each controller
             var createDailyListCommand = new CreateDailyListCommand
             {
-                UserEmail = loggedUserEmail,
+                UserId = userId,
                 Date = createDailyListRequest.Date,
                 Title = createDailyListRequest.Title,
                 Description = createDailyListRequest.Description,
             };
-
-            createDailyListCommand.UserEmail = loggedUserEmail;
 
             var result = await Mediator.Send(createDailyListCommand);
 
@@ -64,7 +62,7 @@ namespace TaskManagement.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] UpdateDailyListRequest updateDailyListRequest)
         {
-            var loggedUserEmail = GetLoggedUserEmail();
+            var loggedUserId = GetLoggedUserId();
 
             //TODO: Move request generation to factory classes for each controller
             var updateDailyListCommand = new UpdateDailyListCommand
@@ -73,7 +71,7 @@ namespace TaskManagement.Api.Controllers
                 Date = updateDailyListRequest.Date,
                 Description = updateDailyListRequest.Description,
                 DailyListId = id,
-                UserEmail = loggedUserEmail
+                UserId = loggedUserId
             };
 
             var result = await Mediator.Send(updateDailyListCommand);
@@ -87,13 +85,13 @@ namespace TaskManagement.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var loggedUserEmail = GetLoggedUserEmail();
+            var loggedUserId = GetLoggedUserId();
 
             //TODO: Move request generation to factory classes for each controller
             var deleteDailyListCommand = new DeleteDailyListCommand
             {
                 DailyListId = id,
-                UserEmail = loggedUserEmail
+                UserId = loggedUserId
             };
 
             var result = await Mediator.Send(deleteDailyListCommand);

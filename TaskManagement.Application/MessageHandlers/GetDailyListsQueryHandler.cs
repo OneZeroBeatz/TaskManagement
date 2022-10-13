@@ -11,18 +11,15 @@ namespace TaskManagement.Application.MessageHandlers
     public class GetDailyListsQueryHandler : IRequestHandler<GetDailyListsQuery, Result<GetDailyListsResponse>>
     {
         private readonly IDailyListRepository _dailyListRepository;
-        private readonly IUserRepository _userRepository;
         private readonly IValidator<GetDailyListsQuery> _validator;
 
         //TODO: Move to configuration
         private const int PageSize = 10;
 
         public GetDailyListsQueryHandler(IDailyListRepository dailyListRepository,
-                                         IUserRepository userRepository,
                                          IValidator<GetDailyListsQuery> validator)
         {
             _dailyListRepository = dailyListRepository ?? throw new ArgumentNullException(nameof(dailyListRepository));
-            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         }
 
@@ -32,11 +29,7 @@ namespace TaskManagement.Application.MessageHandlers
             if (!result.IsValid)
                 return result.CreateErrorResult<GetDailyListsResponse>();
 
-            var user = await _userRepository.GetByEmail(request.UserEmail);
-            if (user == null)
-                return Result.Error<GetDailyListsResponse>("User does not exist");
-
-            var totalNumberOfDailyLists = await _dailyListRepository.GetCount(user.Id, request.Date!.Value, request.Title!);
+            var totalNumberOfDailyLists = await _dailyListRepository.GetCount(request.UserId, request.Date!.Value, request.Title!);
 
             if(totalNumberOfDailyLists == 0)
                 return Result.Error<GetDailyListsResponse>("There are no such lists");
@@ -46,7 +39,7 @@ namespace TaskManagement.Application.MessageHandlers
             if (request.Page > pageCount)
                 return Result.Error<GetDailyListsResponse>("There is no such page");
 
-            var dailyListsForPage = await _dailyListRepository.Get(user.Id, request.Date.Value, request.Title!, request.Page, PageSize);
+            var dailyListsForPage = await _dailyListRepository.Get(request.UserId, request.Date.Value, request.Title!, request.Page, PageSize);
 
             var response = new GetDailyListsResponse()
             {

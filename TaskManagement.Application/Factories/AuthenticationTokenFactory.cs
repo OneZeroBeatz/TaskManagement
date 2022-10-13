@@ -16,10 +16,11 @@ namespace TaskManagement.Application.Factories
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        public string GenerateToken(string email)
+        public string GenerateToken(int userId, string email)
         {
             var claims = new[]
             {
+                new Claim (ClaimTypes.NameIdentifier, userId.ToString()),
                 new Claim (ClaimTypes.Email, email),
             };
 

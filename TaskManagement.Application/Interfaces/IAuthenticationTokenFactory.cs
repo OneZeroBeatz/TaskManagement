@@ -2,6 +2,6 @@
 {
     public interface IAuthenticationTokenFactory
     {
-        string GenerateToken(string email);
+        string GenerateToken(int userId, string email);
     }
 }

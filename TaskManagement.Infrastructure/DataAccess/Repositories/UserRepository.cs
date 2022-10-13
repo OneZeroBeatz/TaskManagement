@@ -14,6 +14,10 @@ namespace TaskManagement.Infrastructure.Repositories
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
         }
 
+        public async Task<User?> GetById(int id)
+        {
+            return await _dbContext.Users.FindAsync(id);
+        }
         public Task<User?> GetByEmail(string email)
         {
             return _dbContext.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));

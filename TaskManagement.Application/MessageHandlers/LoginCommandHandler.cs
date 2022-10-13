@@ -37,7 +37,7 @@ namespace TaskManagement.Application.MessageHandlers
             if (user.Password != request.Password)
                 return Result.Error<string>("Invalid credentials.");
 
-            string token = _authenticationTokenFactory.GenerateToken(request.Email);
+            string token = _authenticationTokenFactory.GenerateToken(user.Id, request.Email);
 
             return Result.Ok(token);
         }

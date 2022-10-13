@@ -20,5 +20,12 @@ namespace TaskManagement.Api.Controllers.Base
             return claim!.Value;
         }
 
+        protected int GetLoggedUserId()
+        {
+            var claimIdentity = HttpContext.User.Identity as ClaimsIdentity;
+            var claim = claimIdentity!.FindFirst(ClaimTypes.NameIdentifier);
+            return int.Parse(claim!.Value);
+        }
+
     }
 }
