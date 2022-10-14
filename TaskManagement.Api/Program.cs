@@ -73,7 +73,6 @@ var messageHandlersAssembly = Assembly.GetAssembly(typeof(LoginCommandHandler));
 builder.Services.AddMediatR(messageHandlersAssembly!);
 builder.Services.AddValidatorsFromAssemblyContaining<LoginCommandValidator>();
 
-
 var app = builder.Build();
 app.UseSession();
 

@@ -22,7 +22,7 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
 
             return tasks;
         }
-        public Task<int> GetTasksFinishedForDateCountAsync(int userId, DateTime date)
+        public Task<int> GetFinishedTasksForDateCountAsync(int userId, DateTime date)
         {
             return DbContext.Tasks
                 .Where(x => x.Done)

@@ -2,7 +2,7 @@
 using MailKit.Security;
 using MimeKit;
 using TaskManagement.Application.Dtos;
-using TaskManagement.Application.Services;
+using TaskManagement.Application.Interfaces;
 using TaskManagement.Infrastructure.Configurations;
 
 namespace TaskManagement.Infrastructure.Services

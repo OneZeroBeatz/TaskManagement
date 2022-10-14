@@ -1,4 +1,5 @@
 ﻿using TaskManagement.Application.Dtos;
+using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.Repositories;
 
 namespace TaskManagement.Application.Services
@@ -20,18 +21,21 @@ namespace TaskManagement.Application.Services
         {
             var user = await _userRepository.GetByEmailAsync(userEmail);
 
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(user!.TimezoneId);
+            if (user == null)
+                return;
+
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(user.TimezoneId);
 
             var userZoneDatetimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, userTimeZone);
 
             var previousDayUtcDate = userZoneDatetimeNow.AddDays(-1).ToUniversalTime().Date;
 
-            var numberOfFinishedTasksForDay = await _taskRepository.GetTasksFinishedForDateCountAsync(user.Id, previousDayUtcDate);
+            var finishedTasksForDateCount = await _taskRepository.GetFinishedTasksForDateCountAsync(user.Id, previousDayUtcDate);
 
             var mailRequest = new MailRequest()
             {
                 Subject = "Finished tasks",
-                Body = $"You finished {numberOfFinishedTasksForDay} tasks for last 24 hours",
+                Body = $"You finished {finishedTasksForDateCount} tasks for last day",
                 ToEmail = userEmail
             };
 

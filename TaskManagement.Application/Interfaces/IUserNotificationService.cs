@@ -1,4 +1,4 @@
-﻿namespace TaskManagement.Application.Services
+﻿namespace TaskManagement.Application.Interfaces
 {
     public interface IUserNotificationService
     {

@@ -1,5 +1,5 @@
 ﻿using Hangfire;
-using TaskManagement.Application.Services;
+using TaskManagement.Application.Interfaces;
 
 namespace TaskManagement.Infrastructure.Services;
 

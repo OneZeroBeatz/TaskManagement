@@ -1,6 +1,6 @@
 ﻿using TaskManagement.Application.Dtos;
 
-namespace TaskManagement.Application.Services
+namespace TaskManagement.Application.Interfaces
 {
     public interface IEmailSender
     {

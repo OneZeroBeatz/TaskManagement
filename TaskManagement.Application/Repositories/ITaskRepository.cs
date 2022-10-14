@@ -5,6 +5,6 @@ namespace TaskManagement.Application.Repositories
     public interface ITaskRepository: IRepository<Domain.Models.Task>
     {
         Task<List<Domain.Models.Task>> Get(int dailyListId, bool done, DateTime? deadlineLimit);
-        Task<int> GetTasksFinishedForDateCountAsync(int userId, DateTime date);
+        Task<int> GetFinishedTasksForDateCountAsync(int userId, DateTime date);
     }
 }
