@@ -15,7 +15,7 @@ namespace TaskManagement.Application.MessageHandlers.Users
 
         public Task Handle(TimezoneUpdatedEvent notification, CancellationToken cancellationToken)
         {
-            _notificationService.UpdateNotificationTimezone(notification.UserEmail, notification.Timezone);
+            _notificationService.AddOrUpdateNotificationTimezone(notification.UserEmail, notification.Timezone);
             return Task.CompletedTask;
         }
     }

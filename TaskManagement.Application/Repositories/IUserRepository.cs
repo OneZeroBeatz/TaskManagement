@@ -7,5 +7,6 @@ namespace TaskManagement.Application.Repositories
     {
         Task<User?> GetByEmailAsync(string email);
         Task<string> GetTimezoneId(int userId);
+        Task<List<User>> GetAll();
     }
 }

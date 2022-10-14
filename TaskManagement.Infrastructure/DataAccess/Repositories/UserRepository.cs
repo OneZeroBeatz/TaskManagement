@@ -12,16 +12,19 @@ namespace TaskManagement.Infrastructure.Repositories
         {
         }
 
+        public Task<List<User>> GetAll()
+        {
+            return DbContext.Users.ToListAsync();
+        }
+
         public Task<User?> GetByEmailAsync(string email)
         {
             return DbContext.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
         }
 
-
-
-        public async Task<string> GetTimezoneId(int userId)
+        public Task<string> GetTimezoneId(int userId)
         {
-            return await DbContext.Users
+            return DbContext.Users
                 .Where(x => x.Id == userId)
                 .Select(x => x.TimezoneId)
                 .FirstAsync();

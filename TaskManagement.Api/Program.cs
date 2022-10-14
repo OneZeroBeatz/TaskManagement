@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
+using TaskManagement.Api;
 using TaskManagement.Api.Middlewares;
 using TaskManagement.Application.Factories;
 using TaskManagement.Application.Interfaces;
@@ -29,7 +30,7 @@ builder.Services.AddDbContext<TaskManagementDbContext>(options =>
     options.UseSqlServer(dbConnectionString);
 });
 
-builder.Services.AddHangfire(x=>x.UseSqlServerStorage(dbConnectionString));
+builder.Services.AddHangfire(x => x.UseInMemoryStorage());
 builder.Services.AddHangfireServer();
 
 builder.Services.AddMvc().AddSessionStateTempDataProvider();
@@ -52,7 +53,7 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IUserNotificationService, UserNotificationService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
-
+builder.Services.AddHostedService<HostedService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>

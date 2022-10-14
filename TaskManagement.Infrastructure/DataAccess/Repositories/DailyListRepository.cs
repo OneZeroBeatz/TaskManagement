@@ -27,9 +27,9 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
             return count;
         }
 
-        public async Task<bool> Exists(int id, int userId)
+        public Task<bool> Exists(int id, int userId)
         {
-            return await DbContext.DailyLists
+            return DbContext.DailyLists
                 .AsNoTracking()
                 .Where(x=>x.Id == id)
                 .Where(x=>x.UserId == userId)

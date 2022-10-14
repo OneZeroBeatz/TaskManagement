@@ -12,7 +12,7 @@ public class NotificationService : INotificationService
         _userNotificationService = userNotificationService ?? throw new ArgumentNullException(nameof(userNotificationService));
     }
 
-    public void UpdateNotificationTimezone(string userEmail, TimeZoneInfo timeZoneInfo)
+    public void AddOrUpdateNotificationTimezone(string userEmail, TimeZoneInfo timeZoneInfo)
     {
         RecurringJob.AddOrUpdate(userEmail, () => _userNotificationService.NotifyUser(userEmail), "0 0 * * *", timeZoneInfo);
     }

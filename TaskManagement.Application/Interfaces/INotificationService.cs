@@ -2,6 +2,6 @@
 {
     public interface INotificationService
     {
-        void UpdateNotificationTimezone(string userEmail, TimeZoneInfo timeZoneInfo);
+        void AddOrUpdateNotificationTimezone(string userEmail, TimeZoneInfo timeZoneInfo);
     }
 }
