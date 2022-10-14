@@ -21,30 +21,21 @@ public class UpdateTimezoneCommandHandler : IRequestHandler<UpdateTimezoneComman
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         _mediator = mediator;
     }
-    //TODO: Add exception handling filter
     public async Task<Result> Handle(UpdateTimezoneCommand request, CancellationToken cancellationToken)
     {
-        try
-        {
-            var result = _validator.Validate(request);
-            if (!result.IsValid)
-                return result.CreateErrorResult();
+        var result = _validator.Validate(request);
+        if (!result.IsValid)
+            return result.CreateErrorResult();
 
-            var user = await _userRepository.FindAsync(request.UserId, cancellationToken);
+        var user = await _userRepository.FindAsync(request.UserId, cancellationToken);
 
-            //TODO: Move to fluent validator
-            var timezone = TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);
+        var timezone = TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);
 
-            user!.TimezoneId = request.TimeZoneId;
-            await _userRepository.UpdateAsync(user, cancellationToken);
+        user!.TimezoneId = request.TimeZoneId;
+        await _userRepository.UpdateAsync(user, cancellationToken);
 
-            await _mediator.Publish(new TimezoneUpdatedEvent { UserEmail = user.Email, Timezone = timezone }, cancellationToken);
+        await _mediator.Publish(new TimezoneUpdatedEvent { UserEmail = user.Email, Timezone = timezone }, cancellationToken);
 
-            return Result.Ok();
-        }
-        catch (TimeZoneNotFoundException)
-        {
-            return Result.Error("Invalid timezone");
-        }
+        return Result.Ok();
     }
 }

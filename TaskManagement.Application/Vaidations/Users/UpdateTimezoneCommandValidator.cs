@@ -11,6 +11,21 @@ public class UpdateTimezoneCommandValidator : AbstractValidator<UpdateTimezoneCo
         RuleFor(command => command.TimeZoneId)
             .NotNull()
             .NotEmpty()
-            .MaximumLength(50);
+            .MaximumLength(50)
+            .Must(ValidTimezone)
+            .WithMessage("Invalid timezone id");
+}
+
+    private bool ValidTimezone(string timezoneId)
+    {
+        try
+        {
+            TimeZoneInfo.FindSystemTimeZoneById(timezoneId);
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
     }
 }
