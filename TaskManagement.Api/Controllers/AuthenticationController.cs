@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Api.Controllers.Base;
-using TaskManagement.Api.Requests;
+using TaskManagement.Api.Requests.Users;
 using TaskManagement.Application.Messages;
 using TaskManagement.Application.Messages.Users;
 
