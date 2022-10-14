@@ -6,7 +6,6 @@ namespace TaskManagement.Application.Vaidations.Tasks;
 
 public class DeleteTaskCommandValidator : AbstractValidator<DeleteTaskCommand>
 {
-
     private readonly IDailyListRepository _dailyListRepository;
     private readonly ITaskRepository _taskRepository;
     public DeleteTaskCommandValidator(IDailyListRepository dailyListRepository, ITaskRepository taskRepository)
@@ -17,7 +16,7 @@ public class DeleteTaskCommandValidator : AbstractValidator<DeleteTaskCommand>
         RuleFor(command => command).NotNull();
         RuleFor(command => command)
             .MustAsync(ExistsForUser)
-            .WithMessage("Task does not exist or does not belong to the user");
+            .WithMessage("Task does not exist");
     }
 
     public async Task<bool> ExistsForUser(DeleteTaskCommand command, CancellationToken token)
