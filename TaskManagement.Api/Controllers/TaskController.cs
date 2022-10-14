@@ -26,12 +26,10 @@ namespace TaskManagement.Api.Controllers
         [HttpGet]
         public async Task<ActionResult> Get(int dailyListId, bool done, DateTime? deadlineLimit)
         {
-            var userId = GetLoggedUserId();
-
             //TODO: Move request generation to factory classes for each controller
             var query = new GetTasksForDailyListQuery
             {
-                UserId = userId!.Value,
+                UserId = CurrentUser.UserId!.Value,
                 DailyListId = dailyListId,
                 DeadlineLimit = deadlineLimit,
                 Done = done
@@ -53,12 +51,10 @@ namespace TaskManagement.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateTaskRequest createTaskRequest)
         {
-            var userId = GetLoggedUserId();
-
             //TODO: Move request generation to factory classes for each controller
             var createTaskCommand = new CreateTaskCommand
             {
-                UserId = userId!.Value,
+                UserId = CurrentUser.UserId!.Value,
                 Deadline = createTaskRequest.Deadline,
                 Title = createTaskRequest.Title,
                 Description = createTaskRequest.Description,
@@ -82,13 +78,11 @@ namespace TaskManagement.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, [FromBody] UpdateTaskRequest updateTaskRequest)
         {
-            var userId = GetLoggedUserId();
-
             //TODO: Move request generation to factory classes for each controller
             var updateTaskCommand = new UpdateTaskCommand
             {
                 TaskId = id,
-                UserId = userId!.Value,
+                UserId = CurrentUser.UserId!.Value,
                 Deadline = updateTaskRequest.Deadline,
                 Title = updateTaskRequest.Title,
                 Description = updateTaskRequest.Description
@@ -111,13 +105,11 @@ namespace TaskManagement.Api.Controllers
         [HttpPut("Done/{id}")]
         public async Task<ActionResult> Update([FromRoute] int id, [FromBody] UpdateTaskDoneStatusRequest updateTaskDoneStatusRequest)
         {
-            var userId = GetLoggedUserId();
-
             //TODO: Move request generation to factory classes for each controller
             var updateDoneStatusCommand = new UpdateTaskDoneStatusCommand
             {
                 TaskId = id,
-                UserId = userId!.Value,
+                UserId = CurrentUser.UserId!.Value,
                 Done = updateTaskDoneStatusRequest.Done
             };
 
@@ -136,13 +128,11 @@ namespace TaskManagement.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
-            var loggedUserId = GetLoggedUserId();
-
             //TODO: Move request generation to factory classes for each controller
             var deleteDailyListCommand = new DeleteTaskCommand
             {
                 TaskId = id,
-                UserId = loggedUserId!.Value
+                UserId = CurrentUser.UserId!.Value
             };
 
             var result = await Mediator.Send(deleteDailyListCommand);

@@ -26,14 +26,12 @@ namespace TaskManagement.Api.Controllers
         [HttpGet]
         public async Task<ActionResult> Get(DateTime? date, string? title, int page)
         {
-            var userId = GetLoggedUserId();
-
             //TODO: Move request generation to factory classes for each controller
             var query = new GetDailyListsQuery
             {
                 Date = date,
                 Title = string.IsNullOrEmpty(title) ? string.Empty : title,
-                UserId = userId!.Value,
+                UserId = CurrentUser.UserId!.Value,
                 Page = page,
             };
 
@@ -53,12 +51,10 @@ namespace TaskManagement.Api.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateDailyListRequest createDailyListRequest)
         {
-            var userId = GetLoggedUserId();
-
             //TODO: Move request generation to factory classes for each controller
             var createDailyListCommand = new CreateDailyListCommand
             {
-                UserId = userId!.Value,
+                UserId = CurrentUser.UserId!.Value,
                 Date = createDailyListRequest.Date,
                 Title = createDailyListRequest.Title,
                 Description = createDailyListRequest.Description,
@@ -81,8 +77,6 @@ namespace TaskManagement.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> Update([FromRoute] int id, [FromBody] UpdateDailyListRequest updateDailyListRequest)
         {
-            var loggedUserId = GetLoggedUserId();
-
             //TODO: Move request generation to factory classes for each controller
             var updateDailyListCommand = new UpdateDailyListCommand
             {
@@ -90,7 +84,7 @@ namespace TaskManagement.Api.Controllers
                 Date = updateDailyListRequest.Date,
                 Description = updateDailyListRequest.Description,
                 DailyListId = id,
-                UserId = loggedUserId.Value
+                UserId = CurrentUser.UserId!.Value
             };
 
             var result = await Mediator.Send(updateDailyListCommand);
@@ -110,13 +104,11 @@ namespace TaskManagement.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete([FromRoute] int id)
         {
-            var loggedUserId = GetLoggedUserId();
-
             //TODO: Move request generation to factory classes for each controller
             var deleteDailyListCommand = new DeleteDailyListCommand
             {
                 DailyListId = id,
-                UserId = loggedUserId!.Value
+                UserId = CurrentUser.UserId!.Value
             };
 
             var result = await Mediator.Send(deleteDailyListCommand);

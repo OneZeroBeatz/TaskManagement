@@ -24,12 +24,10 @@ namespace TaskManagement.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<string>> UpdateTimezone([FromBody] UpdateTimezoneRequest updateTimezonRequest)
         {
-            var loggedUserId = GetLoggedUserId();
-
             //TODO: Move request generation to factory classes for each controller
             var updateTimezoneCommand = new UpdateTimezoneCommand
             {
-                UserId = loggedUserId!.Value,
+                UserId = CurrentUser.UserId!.Value,
                 TimeZoneId = updateTimezonRequest.TimezoneId
             };
 
