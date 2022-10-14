@@ -22,14 +22,9 @@ public class UpdateDailyListCommandHandler : IRequestHandler<UpdateDailyListComm
 
     public async Task<Result> Handle(UpdateDailyListCommand request, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(request);
+        var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
             return result.CreateErrorResult();
-
-        var dailyListExists = await _dailyListRepository.Exists(request.DailyListId, request.UserId, cancellationToken);
-
-        if (!dailyListExists)
-            return Result.Error<int>("Daily list does not exist.");
 
         //TODO: Create factory
         var dailyList = new DailyList()
@@ -41,7 +36,7 @@ public class UpdateDailyListCommandHandler : IRequestHandler<UpdateDailyListComm
             UserId = request.UserId
         };
 
-        await _dailyListRepository.UpdateAsync(dailyList);
+        await _dailyListRepository.UpdateAsync(dailyList, cancellationToken);
 
         return Result.Ok();
     }

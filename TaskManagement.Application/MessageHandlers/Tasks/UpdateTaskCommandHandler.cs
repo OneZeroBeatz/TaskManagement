@@ -38,7 +38,7 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Resul
         task.Description = request.Description;
         task.Deadline = TimeZoneInfo.ConvertTimeToUtc(request.Deadline, timezoneInfo);
 
-        await _taskRepository.UpdateAsync(task);
+        await _taskRepository.UpdateAsync(task, cancellationToken);
 
         return Result.Ok();
     }

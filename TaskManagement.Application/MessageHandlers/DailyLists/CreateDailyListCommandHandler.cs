@@ -22,7 +22,7 @@ public class CreateDailyListCommandHandler : IRequestHandler<CreateDailyListComm
 
     public async Task<Result<int>> Handle(CreateDailyListCommand request, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(request);
+        var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
             return result.CreateErrorResult<int>();
 
@@ -35,7 +35,7 @@ public class CreateDailyListCommandHandler : IRequestHandler<CreateDailyListComm
             UserId = request.UserId
         };
 
-        dailyList = await _dailyListRepository.InsertAsync(dailyList);
+        dailyList = await _dailyListRepository.InsertAsync(dailyList, cancellationToken);
 
         return Result.Ok(dailyList.Id);
     }

@@ -30,7 +30,7 @@ public class UpdateTaskDoneStatusCommandHandler : IRequestHandler<UpdateTaskDone
         task!.Done = request.Done;
         task.LastDoneUpdate = DateTime.UtcNow.Date;
 
-        await _taskRepository.UpdateAsync(task);
+        await _taskRepository.UpdateAsync(task, cancellationToken);
 
         return Result.Ok();
     }

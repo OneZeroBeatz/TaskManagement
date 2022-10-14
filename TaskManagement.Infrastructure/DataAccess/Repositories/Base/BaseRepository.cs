@@ -16,17 +16,17 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories.Base
             return await DbContext.FindAsync<T>(new object[] { id }, token);
         }
 
-        public async Task<T> InsertAsync(T entity)
+        public async Task<T> InsertAsync(T entity, CancellationToken token)
         {
             DbContext.Add(entity);
-            await DbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync(token);
             return entity;
         }
 
-        public async Task UpdateAsync(T entity)
+        public async Task UpdateAsync(T entity, CancellationToken cancellationToken)
         {
             DbContext.Update(entity);
-            await DbContext.SaveChangesAsync();
+            await DbContext.SaveChangesAsync(cancellationToken);
         }
 
         public async Task DeleteAsync(int id)

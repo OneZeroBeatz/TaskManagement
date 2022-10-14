@@ -36,9 +36,9 @@ public class UpdateTimezoneCommandHandler : IRequestHandler<UpdateTimezoneComman
             var timezone = TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);
 
             user!.TimezoneId = request.TimeZoneId;
-            await _userRepository.UpdateAsync(user);
+            await _userRepository.UpdateAsync(user, cancellationToken);
 
-            await _mediator.Publish(new TimezoneUpdatedEvent { UserEmail = user.Email, Timezone = timezone });
+            await _mediator.Publish(new TimezoneUpdatedEvent { UserEmail = user.Email, Timezone = timezone }, cancellationToken);
 
             return Result.Ok();
         }

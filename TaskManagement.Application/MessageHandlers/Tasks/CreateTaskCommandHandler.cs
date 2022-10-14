@@ -28,7 +28,6 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Resul
         if (!result.IsValid)
             return result.CreateErrorResult<int>();
 
-
         string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId);
         var timezoneInfo = TimeZoneInfo.FindSystemTimeZoneById(userTimezoneId);
 
@@ -42,7 +41,7 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Resul
             Done = false,
         };
 
-        task = await _taskRepository.InsertAsync(task);
+        task = await _taskRepository.InsertAsync(task, cancellationToken);
 
         return Result.Ok(task.Id);
     }
