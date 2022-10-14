@@ -14,6 +14,6 @@ public class NotificationJobUpdateService : INotificationJobUpdateService
 
     public void UpdateJob(string userEmail, TimeZoneInfo timeZoneInfo)
     {
-        RecurringJob.AddOrUpdate(recurringJobId: userEmail, methodCall: () => _userNotificationService.NotifyUser(userEmail), "0 0 * * *", timeZoneInfo);
+        RecurringJob.AddOrUpdate(userEmail, () => _userNotificationService.NotifyUser(userEmail), "0 0 * * *", timeZoneInfo);
     }
 }
