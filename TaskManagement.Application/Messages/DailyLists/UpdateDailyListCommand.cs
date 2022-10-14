@@ -3,7 +3,7 @@ using TaskManagement.Shared;
 
 namespace TaskManagement.Application.Messages.DailyLists;
 
-public class UpdateDailyListCommand : IRequest<Result>
+public record UpdateDailyListCommand : IRequest<Result>
 {
     public int DailyListId { get; set; }
     public int UserId { get; set; }

@@ -3,7 +3,7 @@ using TaskManagement.Shared;
 
 namespace TaskManagement.Application.Messages.DailyLists;
 
-public class CreateDailyListCommand : IRequest<Result<int>>
+public record CreateDailyListCommand : IRequest<Result<int>>
 {
     public int UserId { get; set; }
     public string Title { get; set; } = string.Empty;

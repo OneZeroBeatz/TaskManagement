@@ -3,7 +3,7 @@ using TaskManagement.Shared;
 
 namespace TaskManagement.Application.Messages.Tasks;
 
-public class UpdateTaskCommand : IRequest<Result>
+public record UpdateTaskCommand : IRequest<Result>
 {
     public int TaskId { get; set; }
     public int UserId { get; set; }

@@ -4,7 +4,7 @@ using TaskManagement.Shared;
 
 namespace TaskManagement.Application.Messages.Tasks;
 
-public class GetTasksForDailyListQuery : IRequest<Result<GetTasksForDailyListResponse>>
+public record GetTasksForDailyListQuery : IRequest<Result<GetTasksForDailyListResponse>>
 {
     public int UserId { get; set; }
     public int DailyListId { get; set; }

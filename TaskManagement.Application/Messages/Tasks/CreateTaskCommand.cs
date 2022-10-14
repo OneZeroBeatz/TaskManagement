@@ -3,7 +3,7 @@ using TaskManagement.Shared;
 
 namespace TaskManagement.Application.Messages.Tasks;
 
-public class CreateTaskCommand : IRequest<Result<int>>
+public record CreateTaskCommand : IRequest<Result<int>>
 {
     public int UserId { get; set; }
     public string Title { get; set; } = string.Empty;
