@@ -8,7 +8,7 @@ using System.Text;
 using TaskManagement.Api;
 using TaskManagement.Application.Factories;
 using TaskManagement.Application.Interfaces;
-using TaskManagement.Application.MessageHandlers;
+using TaskManagement.Application.MessageHandlers.Users;
 using TaskManagement.Application.Repositories;
 using TaskManagement.Application.Vaidations;
 using TaskManagement.Infrastructure.DataAccess;

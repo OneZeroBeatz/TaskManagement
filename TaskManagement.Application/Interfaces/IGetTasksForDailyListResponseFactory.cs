@@ -1,4 +1,4 @@
-﻿using TaskManagement.Api.Controllers;
+﻿using TaskManagement.Application.Messages.Responses;
 
 namespace TaskManagement.Application.Interfaces
 {

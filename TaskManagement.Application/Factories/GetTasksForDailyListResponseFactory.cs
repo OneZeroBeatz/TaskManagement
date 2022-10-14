@@ -1,5 +1,5 @@
-﻿using TaskManagement.Api.Controllers;
-using TaskManagement.Application.Interfaces;
+﻿using TaskManagement.Application.Interfaces;
+using TaskManagement.Application.Messages.Responses;
 using TaskManagement.Application.Messages.Responses.Dtos;
 
 namespace TaskManagement.Application.Factories

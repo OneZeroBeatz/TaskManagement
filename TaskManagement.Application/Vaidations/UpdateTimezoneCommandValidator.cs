@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using TaskManagement.Application.Messages;
+using TaskManagement.Application.Messages.Users;
 
 namespace TaskManagement.Application.Vaidations
 {

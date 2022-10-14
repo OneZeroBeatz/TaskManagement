@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Api.Controllers.Base;
 using TaskManagement.Api.Requests;
 using TaskManagement.Application.Messages;
+using TaskManagement.Application.Messages.Users;
 
 namespace TaskManagement.Api.Controllers
 {

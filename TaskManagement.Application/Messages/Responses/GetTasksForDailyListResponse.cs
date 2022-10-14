@@ -1,15 +1,13 @@
 ﻿using TaskManagement.Application.Messages.Responses.Dtos;
 
-namespace TaskManagement.Api.Controllers
+namespace TaskManagement.Application.Messages.Responses;
+
+public class GetTasksForDailyListResponse
 {
-    public class GetTasksForDailyListResponse
+    public List<TaskDto> Tasks { get; private set; }
+
+    public GetTasksForDailyListResponse(List<TaskDto> tasks)
     {
-        public List<TaskDto> Tasks { get; private set; }
-
-        public GetTasksForDailyListResponse(List<TaskDto> tasks)
-        {
-            Tasks = tasks;
-        }
+        Tasks = tasks;
     }
-
 }
