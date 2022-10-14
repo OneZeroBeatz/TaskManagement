@@ -7,6 +7,6 @@ namespace TaskManagement.Application.Repositories
     {
         Task<int> GetCount(int userId, DateTime date, string title);
         Task<List<DailyList>> Get(int userId, DateTime date, string title, int page, int pageSize);
-        Task<bool> Exists(int id, int userId);
+        Task<bool> Exists(int id, int userId, CancellationToken token);
     }
 }

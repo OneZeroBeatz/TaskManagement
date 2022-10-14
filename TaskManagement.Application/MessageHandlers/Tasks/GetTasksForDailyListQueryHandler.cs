@@ -36,7 +36,7 @@ public class GetTasksForDailyListQueryHandler : IRequestHandler<GetTasksForDaily
         if (!result.IsValid)
             return result.CreateErrorResult<GetTasksForDailyListResponse>();
 
-        var listExists = await _dailyListRepository.Exists(request.DailyListId, request.UserId);
+        var listExists = await _dailyListRepository.Exists(request.DailyListId, request.UserId, cancellationToken);
 
         if (!listExists)
             return Result.Error<GetTasksForDailyListResponse>("Daily list does not exist.");

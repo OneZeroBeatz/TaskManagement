@@ -32,7 +32,7 @@ public class DeleteTaskCommandHandler : IRequestHandler<DeleteTaskCommand, Resul
         if (task == null)
             return Result.Error("Task does not exist.");
 
-        var dailyListExists = await _dailyListRepository.Exists(task.DailyListId, request.UserId);
+        var dailyListExists = await _dailyListRepository.Exists(task.DailyListId, request.UserId, cancellationToken);
 
         if (!dailyListExists)
             return Result.Error<int>("Not allowed to update specified task.");

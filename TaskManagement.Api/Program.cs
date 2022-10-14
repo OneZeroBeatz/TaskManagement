@@ -97,10 +97,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.ConfigureExceptionHandler();
+}
 
-app.ConfigureExceptionHandler();
-
-app.UseHangfireDashboard("/scheduling");
 
 app.UseHttpsRedirection();
 

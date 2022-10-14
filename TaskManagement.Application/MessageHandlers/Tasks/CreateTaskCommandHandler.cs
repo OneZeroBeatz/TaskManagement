@@ -31,7 +31,7 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Resul
         if (!result.IsValid)
             return result.CreateErrorResult<int>();
 
-        var listExists = await _dailyListRepository.Exists(request.DailyListId, request.UserId);
+        var listExists = await _dailyListRepository.Exists(request.DailyListId, request.UserId, cancellationToken);
 
         if (!listExists)
             return Result.Error<int>("Daily list does not exist.");

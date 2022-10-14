@@ -37,7 +37,7 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Resul
         if (task == null)
             return Result.Error("Task does not exist.");
 
-        var listExists = await _dailyListRepository.Exists(task.DailyListId, request.UserId);
+        var listExists = await _dailyListRepository.Exists(task.DailyListId, request.UserId, cancellationToken);
 
         if (!listExists)
             return Result.Error<int>("Not allowed to update specified task.");

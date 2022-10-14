@@ -27,13 +27,13 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
             return count;
         }
 
-        public Task<bool> Exists(int id, int userId)
+        public Task<bool> Exists(int id, int userId, CancellationToken token)
         {
             return DbContext.DailyLists
                 .AsNoTracking()
                 .Where(x=>x.Id == id)
                 .Where(x=>x.UserId == userId)
-                .AnyAsync();
+                .AnyAsync(token);
         }
 
         private IQueryable<DailyList> GetBy(int userId, DateTime date, string title)

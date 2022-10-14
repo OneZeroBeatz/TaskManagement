@@ -21,14 +21,9 @@ public class DeleteDailyListCommandHandler : IRequestHandler<DeleteDailyListComm
 
     public async Task<Result> Handle(DeleteDailyListCommand request, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(request);
+        var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
             return result.CreateErrorResult();
-
-        var dailyListExists = await _dailyListRepository.Exists(request.DailyListId, request.UserId);
-
-        if (!dailyListExists)
-            return Result.Error<int>("Daily list does not exist.");
 
         await _dailyListRepository.DeleteAsync(request.DailyListId);
 

@@ -26,7 +26,7 @@ public class UpdateDailyListCommandHandler : IRequestHandler<UpdateDailyListComm
         if (!result.IsValid)
             return result.CreateErrorResult();
 
-        var dailyListExists = await _dailyListRepository.Exists(request.DailyListId, request.UserId);
+        var dailyListExists = await _dailyListRepository.Exists(request.DailyListId, request.UserId, cancellationToken);
 
         if (!dailyListExists)
             return Result.Error<int>("Daily list does not exist.");
