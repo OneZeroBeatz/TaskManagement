@@ -47,8 +47,10 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IAuthenticationTokenFactory, AuthenticationTokenFactory>();
 builder.Services.AddScoped<IGetTasksForDailyListResponseFactory, GetTasksForDailyListResponseFactory>();
 builder.Services.AddScoped<IGetDailyListsResponseFactory, GetDailyListsResponseFactory>();
+
 builder.Services.AddScoped<INotificationJobUpdateService, NotificationJobUpdateService>();
 builder.Services.AddScoped<IUserNotificationService, UserNotificationService>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
 

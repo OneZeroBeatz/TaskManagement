@@ -1,10 +1,11 @@
 ﻿using MailKit.Net.Smtp;
 using MailKit.Security;
 using MimeKit;
+using TaskManagement.Application.Dtos;
 using TaskManagement.Application.Services;
 using TaskManagement.Infrastructure.Configurations;
 
-namespace TaskManagement.Application.Dtos
+namespace TaskManagement.Infrastructure.Services
 {
     public partial class EmailSender : IEmailSender
     {
