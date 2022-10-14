@@ -3,7 +3,7 @@ using MediatR;
 using TaskManagement.Application.Extensions;
 using TaskManagement.Application.Messages.Users;
 using TaskManagement.Application.Repositories;
-using TaskManagement.Infrastructure.Services;
+using TaskManagement.Domain.Events;
 using TaskManagement.Shared;
 
 namespace TaskManagement.Application.MessageHandlers.Users;

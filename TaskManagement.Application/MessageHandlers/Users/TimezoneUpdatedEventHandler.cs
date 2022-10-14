@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using TaskManagement.Application.Messages.Users;
+using TaskManagement.Domain.Events;
 using TaskManagement.Infrastructure.Services;
 
 namespace TaskManagement.Application.MessageHandlers.Users

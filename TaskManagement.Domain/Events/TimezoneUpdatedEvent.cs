@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace TaskManagement.Application.Messages.Users
+namespace TaskManagement.Domain.Events
 {
     public class TimezoneUpdatedEvent : INotification
     {
