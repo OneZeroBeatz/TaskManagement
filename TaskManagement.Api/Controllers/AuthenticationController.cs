@@ -16,6 +16,7 @@ namespace TaskManagement.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Login([FromBody] LoginRequest loginRequest)
         {
+
             var loginCommand = new LoginCommand
             {
                 Email = loginRequest.Email,
@@ -24,8 +25,8 @@ namespace TaskManagement.Api.Controllers
 
             var result = await Mediator.Send(loginCommand);
 
-            if(result.Success)
-                return Ok(result.Value);
+            if (result.Success)
+                throw new Exception("Exception");//return Ok(result.Value);
 
             return BadRequest(result.ErrorMessage);
         } 

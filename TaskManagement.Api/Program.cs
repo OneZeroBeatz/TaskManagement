@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 using TaskManagement.Api;
-using TaskManagement.Api.Middlewares;
+using TaskManagement.Api.Extensions;
 using TaskManagement.Application.Factories;
 using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.MessageHandlers.Users;
@@ -82,6 +82,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.ConfigureExceptionHandler();
 
 app.UseHangfireDashboard("/scheduling");
 

@@ -47,11 +47,3 @@ public class UserPersistenceCheckMiddleware
         await _next(httpContext);
     }
 }
-public static class MyMiddlewareExtensions
-{
-    public static IApplicationBuilder UseUserPersistenceCheck(this IApplicationBuilder builder)
-    {
-        return builder.UseWhen(httpContext => !httpContext.Request.Path.StartsWithSegments($"/api/authentication"),
-                               subApp => subApp.UseMiddleware<UserPersistenceCheckMiddleware>());
-    }
-}
