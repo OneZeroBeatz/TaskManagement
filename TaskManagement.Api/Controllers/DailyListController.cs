@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Api.Controllers.Base;
 using TaskManagement.Api.Requests.DailyLists;
-using TaskManagement.Application.Messages;
 using TaskManagement.Application.Messages.DailyLists;
 
 namespace TaskManagement.Api.Controllers
