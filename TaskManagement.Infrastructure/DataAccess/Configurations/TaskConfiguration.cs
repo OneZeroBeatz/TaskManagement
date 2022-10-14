@@ -8,9 +8,10 @@ public class TaskConfiguration : IEntityTypeConfiguration<Domain.Models.Task>
     public void Configure(EntityTypeBuilder<Domain.Models.Task> builder)
     {
         builder.HasKey(it => it.Id);
-        builder.Property(e => e.Deadline).HasPrecision(0); ;
+        builder.Property(e => e.Deadline).HasPrecision(0);
         builder.Property(e => e.Description).HasMaxLength(500);
         builder.Property(e => e.Title).HasMaxLength(50);
+        builder.Property(e => e.LastDateUpdate).HasColumnType("date");
 
         builder.HasOne(d => d.DailyList)
             .WithMany(p => p.Tasks)
