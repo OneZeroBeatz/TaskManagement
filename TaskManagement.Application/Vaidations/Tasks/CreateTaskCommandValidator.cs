@@ -6,8 +6,8 @@ namespace TaskManagement.Application.Vaidations.Tasks;
 
 public class CreateTaskCommandValidator : AbstractValidator<CreateTaskCommand>
 {
-
     private readonly IDailyListRepository _dailyListRepository;
+
     public CreateTaskCommandValidator(IDailyListRepository dailyListRepository)
     {
         _dailyListRepository = dailyListRepository ?? throw new ArgumentNullException(nameof(dailyListRepository));

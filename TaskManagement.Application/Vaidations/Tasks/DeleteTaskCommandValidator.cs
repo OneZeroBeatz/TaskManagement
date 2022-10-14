@@ -1,36 +1,19 @@
 ﻿using FluentValidation;
 using TaskManagement.Application.Messages.Tasks;
 using TaskManagement.Application.Repositories;
+using TaskManagement.Application.Vaidations.Tasks.Base;
 
 namespace TaskManagement.Application.Vaidations.Tasks;
 
-public class DeleteTaskCommandValidator : AbstractValidator<DeleteTaskCommand>
+public class DeleteTaskCommandValidator : TaskPersistenceAbstractValidator<DeleteTaskCommand>
 {
-    private readonly IDailyListRepository _dailyListRepository;
-    private readonly ITaskRepository _taskRepository;
-    public DeleteTaskCommandValidator(IDailyListRepository dailyListRepository, ITaskRepository taskRepository)
+    public DeleteTaskCommandValidator(IDailyListRepository dailyListRepository, ITaskRepository taskRepository) 
+        : base(dailyListRepository, taskRepository)
     {
-        _dailyListRepository = dailyListRepository ?? throw new ArgumentNullException(nameof(dailyListRepository));
-        _taskRepository = taskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
 
         RuleFor(command => command).NotNull();
         RuleFor(command => command)
-            .MustAsync(ExistsForUser)
+            .MustAsync((command, token) => ExistsForUser(command.TaskId, command.TaskId, token))
             .WithMessage("Task does not exist");
-    }
-
-    public async Task<bool> ExistsForUser(DeleteTaskCommand command, CancellationToken token)
-    {
-        var task = await _taskRepository.FindAsync(command.TaskId, token);
-
-        if (task == null)
-            return false;
-
-        var dailyListExists = await _dailyListRepository.Exists(task.DailyListId, command.UserId, token);
-
-        if (!dailyListExists)
-            return false;
-
-        return true;
     }
 }

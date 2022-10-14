@@ -7,6 +7,7 @@ namespace TaskManagement.Application.Vaidations.Tasks;
 public class GetTasksForDailyListQueryValidator : AbstractValidator<GetTasksForDailyListQuery>
 {
     private readonly IDailyListRepository _dailyListRepository;
+
     public GetTasksForDailyListQueryValidator(IDailyListRepository dailyListRepository)
     {
         _dailyListRepository = dailyListRepository ?? throw new ArgumentNullException(nameof(dailyListRepository));
