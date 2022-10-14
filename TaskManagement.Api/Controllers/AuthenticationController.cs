@@ -2,7 +2,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Api.Controllers.Base;
 using TaskManagement.Api.Requests.Users;
-using TaskManagement.Application.Messages;
 using TaskManagement.Application.Messages.Users;
 
 namespace TaskManagement.Api.Controllers
@@ -13,10 +12,14 @@ namespace TaskManagement.Api.Controllers
     {
         public AuthenticationController(IMediator mediator) : base(mediator) { }
 
+        /// <summary>
+        /// Sign in user using email and password
+        /// </summary>
+        /// <param name="loginRequest"></param>
+        /// <returns>Token for further authentication</returns>
         [HttpPost]
         public async Task<ActionResult<string>> Login([FromBody] LoginRequest loginRequest)
         {
-
             var loginCommand = new LoginCommand
             {
                 Email = loginRequest.Email,
@@ -26,7 +29,7 @@ namespace TaskManagement.Api.Controllers
             var result = await Mediator.Send(loginCommand);
 
             if (result.Success)
-                throw new Exception("Exception");//return Ok(result.Value);
+                return Ok(result.Value);
 
             return BadRequest(result.ErrorMessage);
         } 

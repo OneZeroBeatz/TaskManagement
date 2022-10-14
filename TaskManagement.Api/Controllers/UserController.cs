@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Api.Controllers.Base;
 using TaskManagement.Api.Requests.Users;
-using TaskManagement.Application.Messages;
 using TaskManagement.Application.Messages.Users;
 
 namespace TaskManagement.Api.Controllers
@@ -14,7 +13,11 @@ namespace TaskManagement.Api.Controllers
     public class UserController : BaseController
     {
         public UserController(IMediator mediator) : base(mediator) { }
-
+        /// <summary>
+        /// Updating timezone for signed user
+        /// </summary>
+        /// <param name="updateTimezonRequest">Request that contains data needed for update</param>
+        /// <returns></returns>
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<ActionResult<string>> UpdateTimezone([FromBody] UpdateTimezoneRequest updateTimezonRequest)
@@ -25,7 +28,7 @@ namespace TaskManagement.Api.Controllers
             var updateTimezoneCommand = new UpdateTimezoneCommand
             {
                 UserId = loggedUserId,
-                TimeZoneId = updateTimezonRequest.TimeZoneId
+                TimeZoneId = updateTimezonRequest.TimezoneId
             };
 
             var result = await Mediator.Send(updateTimezoneCommand);
