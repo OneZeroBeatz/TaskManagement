@@ -29,7 +29,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<string>>
         if (!result.IsValid)
             return result.CreateErrorResult<string>();
 
-        var user = await _userRepository.GetByEmail(request.Email);
+        var user = await _userRepository.GetByEmailAsync(request.Email);
 
         if (user == null)
             return Result.Error<string>("Invalid credentials.");

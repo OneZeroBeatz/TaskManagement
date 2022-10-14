@@ -5,7 +5,7 @@ namespace TaskManagement.Application.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {
-        Task<User?> GetByEmail(string email);
+        Task<User?> GetByEmailAsync(string email);
         Task<string> GetTimezoneId(int userId);
     }
 }

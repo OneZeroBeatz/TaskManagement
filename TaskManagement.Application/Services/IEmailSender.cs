@@ -1,8 +1,9 @@
-﻿namespace TaskManagement.Application.Services
+﻿using TaskManagement.Application.Dtos;
+
+namespace TaskManagement.Application.Services
 {
     public interface IEmailSender
     {
-        public void SendEmail(object emailDto);
-
+        Task SendEmailAsync(MailRequest mailRequest);
     }
 }
