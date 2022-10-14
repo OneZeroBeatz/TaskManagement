@@ -4,7 +4,7 @@ using TaskManagement.Infrastructure.Services;
 
 namespace TaskManagement.Application.MessageHandlers.Users
 {
-    public class TimezoneUpdatedEventHandler : IRequestHandler<TimezoneUpdatedEvent>
+    public class TimezoneUpdatedEventHandler : INotificationHandler<TimezoneUpdatedEvent>
     {
         private readonly INotificationService _notificationService;
 
@@ -13,10 +13,10 @@ namespace TaskManagement.Application.MessageHandlers.Users
             _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
-        public Task<Unit> Handle(TimezoneUpdatedEvent request, CancellationToken cancellationToken)
+        public Task Handle(TimezoneUpdatedEvent notification, CancellationToken cancellationToken)
         {
-            _notificationService.UpdateNotificationTimezone(request.UserEmail, request.Timezone);
-            return Task.FromResult(Unit.Value);
+            _notificationService.UpdateNotificationTimezone(notification.UserEmail, notification.Timezone)
+            return Task.CompletedTask;
         }
     }
 }
