@@ -31,7 +31,7 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Resul
 
         var task = await _taskRepository.FindAsync(request.TaskId, cancellationToken);
 
-        string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId);
+        string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId, cancellationToken);
         var timezoneInfo = TimeZoneInfo.FindSystemTimeZoneById(userTimezoneId);
 
         task!.Title = request.Title;

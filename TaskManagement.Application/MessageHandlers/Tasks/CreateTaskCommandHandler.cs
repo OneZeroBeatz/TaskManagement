@@ -28,7 +28,7 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Resul
         if (!result.IsValid)
             return result.CreateErrorResult<int>();
 
-        string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId);
+        string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId, cancellationToken);
         var timezoneInfo = TimeZoneInfo.FindSystemTimeZoneById(userTimezoneId);
 
         //TODO: Create factory

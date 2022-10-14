@@ -25,19 +25,13 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<string>>
 
     public async Task<Result<string>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(request);
+        var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
             return result.CreateErrorResult<string>();
 
-        var user = await _userRepository.GetByEmailAsync(request.Email);
+        var user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
 
-        if (user == null)
-            return Result.Error<string>("Invalid credentials.");
-
-        if (user.Password != request.Password)
-            return Result.Error<string>("Invalid credentials.");
-
-        string token = _authenticationTokenFactory.GenerateToken(user.Id, request.Email);
+        string token = _authenticationTokenFactory.GenerateToken(user!.Id, request.Email);
 
         return Result.Ok(token);
     }

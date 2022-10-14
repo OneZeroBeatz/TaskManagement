@@ -2,7 +2,7 @@
 using TaskManagement.Domain.Events;
 using TaskManagement.Infrastructure.Services;
 
-namespace TaskManagement.Application.MessageHandlers.Users
+namespace TaskManagement.Application.EventHandlers
 {
     public class TimezoneUpdatedEventHandler : INotificationHandler<TimezoneUpdatedEvent>
     {

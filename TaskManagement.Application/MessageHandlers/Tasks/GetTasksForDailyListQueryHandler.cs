@@ -33,7 +33,7 @@ public class GetTasksForDailyListQueryHandler : IRequestHandler<GetTasksForDaily
         if (!result.IsValid)
             return result.CreateErrorResult<GetTasksForDailyListResponse>();
 
-        string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId);
+        string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId, cancellationToken);
         var timezoneInfo = TimeZoneInfo.FindSystemTimeZoneById(userTimezoneId);
 
         var deadlineTimeLimitUtc = TimeZoneInfo.ConvertTimeToUtc(request.DeadlineLimit!.Value, timezoneInfo);

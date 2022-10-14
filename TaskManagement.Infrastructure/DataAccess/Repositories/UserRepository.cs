@@ -17,17 +17,17 @@ namespace TaskManagement.Infrastructure.Repositories
             return DbContext.Users.ToListAsync();
         }
 
-        public Task<User?> GetByEmailAsync(string email)
+        public Task<User?> GetByEmailAsync(string email, CancellationToken token)
         {
-            return DbContext.Users.FirstOrDefaultAsync(x => x.Email.Equals(email));
+            return DbContext.Users
+                .FirstOrDefaultAsync(x => x.Email.Equals(email), token);
         }
-
-        public Task<string> GetTimezoneId(int userId)
+        public Task<string> GetTimezoneId(int userId, CancellationToken token)
         {
             return DbContext.Users
                 .Where(x => x.Id == userId)
                 .Select(x => x.TimezoneId)
-                .FirstAsync();
+                .FirstAsync(token);
         }
     }
 }

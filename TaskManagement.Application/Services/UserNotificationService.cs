@@ -19,7 +19,7 @@ namespace TaskManagement.Application.Services
 
         public async Task NotifyUser(string userEmail)
         {
-            var user = await _userRepository.GetByEmailAsync(userEmail);
+            var user = await _userRepository.GetByEmailAsync(userEmail, CancellationToken.None);
 
             if (user == null)
                 return;
