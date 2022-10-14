@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 using TaskManagement.Application.Messages.Tasks;
 
-namespace TaskManagement.Application.Vaidations.Tasks
+namespace TaskManagement.Application.Vaidations.Tasks;
+
+public class UpdateTaskDoneStatusCommandValidator : AbstractValidator<UpdateTaskDoneStatusCommand>
 {
-    public class UpdateTaskDoneStatusCommandValidator : AbstractValidator<UpdateTaskDoneStatusCommand>
+    public UpdateTaskDoneStatusCommandValidator()
     {
-        public UpdateTaskDoneStatusCommandValidator()
-        {
-            RuleFor(command => command).NotNull();
-        }
+        RuleFor(command => command).NotNull();
     }
 }

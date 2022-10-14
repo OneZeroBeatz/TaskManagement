@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using TaskManagement.Application.Messages.Tasks;
 
-namespace TaskManagement.Application.Vaidations.Tasks
+namespace TaskManagement.Application.Vaidations.Tasks;
+
+public class GetTasksForDailyListQueryValidator : AbstractValidator<GetTasksForDailyListQuery>
 {
-    public class GetTasksForDailyListQueryValidator : AbstractValidator<GetTasksForDailyListQuery>
+    public GetTasksForDailyListQueryValidator()
     {
-        public GetTasksForDailyListQueryValidator()
-        {
-            RuleFor(command => command.DeadlineLimit).NotNull();
-        }
+        RuleFor(command => command).NotNull();
+        RuleFor(command => command.DeadlineLimit).NotNull();
     }
 }

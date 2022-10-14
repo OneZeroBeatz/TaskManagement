@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 using TaskManagement.Application.Messages.Tasks;
 
-namespace TaskManagement.Application.Vaidations
+namespace TaskManagement.Application.Vaidations.Tasks;
+
+public class DeleteTaskCommandValidator : AbstractValidator<DeleteTaskCommand>
 {
-    public class DeleteTaskCommandValidator : AbstractValidator<DeleteTaskCommand>
+    public DeleteTaskCommandValidator()
     {
-        public DeleteTaskCommandValidator()
-        {
-            RuleFor(command => command).NotNull();
-        }
+        RuleFor(command => command).NotNull();
     }
 }
