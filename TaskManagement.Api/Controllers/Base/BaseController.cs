@@ -1,31 +1,20 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
+using TaskManagement.Application.Interfaces;
 
 namespace TaskManagement.Api.Controllers.Base
 {
     public abstract class BaseController : ControllerBase
     {
         protected readonly IMediator Mediator;
+        protected readonly ICurrentUserService _currentUser;
 
-        protected BaseController(IMediator mediator)
+        protected BaseController(IMediator mediator, ICurrentUserService currentUser)
         {
             Mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            _currentUser = currentUser ?? throw new ArgumentNullException(nameof(currentUser));
         }
 
-        protected string GetLoggedUserEmail()
-        {
-            var claimIdentity = HttpContext.User.Identity as ClaimsIdentity;
-            var claim = claimIdentity!.FindFirst(ClaimTypes.Email);
-            return claim!.Value;
-        }
-
-        protected int GetLoggedUserId()
-        {
-            var claimIdentity = HttpContext.User.Identity as ClaimsIdentity;
-            var claim = claimIdentity!.FindFirst(ClaimTypes.NameIdentifier);
-            return int.Parse(claim!.Value);
-        }
-
+        protected int? GetLoggedUserId() => _currentUser.UserId;
     }
 }

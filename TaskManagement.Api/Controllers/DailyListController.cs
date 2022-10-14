@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Api.Controllers.Base;
 using TaskManagement.Api.Requests.DailyLists;
+using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.Messages.DailyLists;
 
 namespace TaskManagement.Api.Controllers
@@ -13,7 +14,7 @@ namespace TaskManagement.Api.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class DailyListController : BaseController
     {
-        public DailyListController(IMediator mediator) : base(mediator) { }
+        public DailyListController(IMediator mediator, ICurrentUserService currentUserService) : base(mediator, currentUserService) { }
 
         /// <summary>
         /// Fatching one page of configurable size containing daily lists filtered by provided parameter for signed user
@@ -32,7 +33,7 @@ namespace TaskManagement.Api.Controllers
             {
                 Date = date,
                 Title = string.IsNullOrEmpty(title) ? string.Empty : title,
-                UserId = userId,
+                UserId = userId!.Value,
                 Page = page,
             };
 
@@ -57,7 +58,7 @@ namespace TaskManagement.Api.Controllers
             //TODO: Move request generation to factory classes for each controller
             var createDailyListCommand = new CreateDailyListCommand
             {
-                UserId = userId,
+                UserId = userId!.Value,
                 Date = createDailyListRequest.Date,
                 Title = createDailyListRequest.Title,
                 Description = createDailyListRequest.Description,
@@ -89,7 +90,7 @@ namespace TaskManagement.Api.Controllers
                 Date = updateDailyListRequest.Date,
                 Description = updateDailyListRequest.Description,
                 DailyListId = id,
-                UserId = loggedUserId
+                UserId = loggedUserId.Value
             };
 
             var result = await Mediator.Send(updateDailyListCommand);
@@ -115,7 +116,7 @@ namespace TaskManagement.Api.Controllers
             var deleteDailyListCommand = new DeleteDailyListCommand
             {
                 DailyListId = id,
-                UserId = loggedUserId
+                UserId = loggedUserId!.Value
             };
 
             var result = await Mediator.Send(deleteDailyListCommand);

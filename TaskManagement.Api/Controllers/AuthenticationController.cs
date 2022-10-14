@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Api.Controllers.Base;
 using TaskManagement.Api.Requests.Users;
+using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.Messages.Users;
 
 namespace TaskManagement.Api.Controllers
@@ -10,7 +11,7 @@ namespace TaskManagement.Api.Controllers
     [Route("api/[controller]")]
     public class AuthenticationController : BaseController
     {
-        public AuthenticationController(IMediator mediator) : base(mediator) { }
+        public AuthenticationController(IMediator mediator, ICurrentUserService currentUserService) : base(mediator, currentUserService) { }
 
         /// <summary>
         /// Sign in user using email and password

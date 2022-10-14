@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using TaskManagement.Api;
 using TaskManagement.Api.Extensions;
+using TaskManagement.Api.Services;
 using TaskManagement.Application.Factories;
 using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.MessageHandlers.Users;
@@ -51,6 +52,8 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddSingleton(builder.Configuration.GetSection("Mail").Get<MailConfiguration>());
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -59,6 +62,7 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IAuthenticationTokenFactory, AuthenticationTokenFactory>();
 builder.Services.AddScoped<IGetTasksForDailyListResponseFactory, GetTasksForDailyListResponseFactory>();
 builder.Services.AddScoped<IGetDailyListsResponseFactory, GetDailyListsResponseFactory>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddScoped<IUserNotificationService, UserNotificationService>();

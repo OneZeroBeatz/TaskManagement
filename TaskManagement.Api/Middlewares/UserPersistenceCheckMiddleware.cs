@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Security.Claims;
+using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.Repositories;
 
 namespace TaskManagement.Api.Middlewares;
@@ -13,27 +14,15 @@ public class UserPersistenceCheckMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext httpContext, IUserRepository emailRepository)
+    public async Task Invoke(HttpContext httpContext, IUserRepository emailRepository, ICurrentUserService currentUser)
     {
-        var claimIdentity = httpContext.User.Identity as ClaimsIdentity;
-
-        if (claimIdentity == null)
+        if (!currentUser.UserId.HasValue)
         {
             await _next(httpContext);
             return;
         }
 
-        var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
-
-        if (claim == null)
-        {
-            await _next(httpContext);
-            return;
-        }
-
-        var userId = int.Parse(claim.Value);
-
-        var user = await emailRepository.FindAsync(userId);
+        var user = await emailRepository.FindAsync(currentUser.UserId.Value);
 
         if (user == null)
         {

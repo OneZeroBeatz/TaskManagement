@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Api.Controllers.Base;
 using TaskManagement.Api.Requests.Tasks;
+using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.Messages.Tasks;
 
 namespace TaskManagement.Api.Controllers
@@ -13,7 +14,7 @@ namespace TaskManagement.Api.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TaskController : BaseController
     {
-        public TaskController(IMediator mediator) : base(mediator) { }
+        public TaskController(IMediator mediator, ICurrentUserService currentUserService) : base(mediator, currentUserService) { }
 
         /// <summary>
         /// Fatching all tasks for one daily list that pass the filtering
@@ -30,7 +31,7 @@ namespace TaskManagement.Api.Controllers
             //TODO: Move request generation to factory classes for each controller
             var query = new GetTasksForDailyListQuery
             {
-                UserId = userId,
+                UserId = userId!.Value,
                 DailyListId = dailyListId,
                 DeadlineLimit = deadlineLimit,
                 Done = done
@@ -57,7 +58,7 @@ namespace TaskManagement.Api.Controllers
             //TODO: Move request generation to factory classes for each controller
             var createTaskCommand = new CreateTaskCommand
             {
-                UserId = userId,
+                UserId = userId!.Value,
                 Deadline = createTaskRequest.Deadline,
                 Title = createTaskRequest.Title,
                 Description = createTaskRequest.Description,
@@ -87,7 +88,7 @@ namespace TaskManagement.Api.Controllers
             var updateTaskCommand = new UpdateTaskCommand
             {
                 TaskId = id,
-                UserId = userId,
+                UserId = userId!.Value,
                 Deadline = updateTaskRequest.Deadline,
                 Title = updateTaskRequest.Title,
                 Description = updateTaskRequest.Description
@@ -116,7 +117,7 @@ namespace TaskManagement.Api.Controllers
             var updateDoneStatusCommand = new UpdateTaskDoneStatusCommand
             {
                 TaskId = id,
-                UserId = userId,
+                UserId = userId!.Value,
                 Done = updateTaskDoneStatusRequest.Done
             };
 
@@ -141,7 +142,7 @@ namespace TaskManagement.Api.Controllers
             var deleteDailyListCommand = new DeleteTaskCommand
             {
                 TaskId = id,
-                UserId = loggedUserId
+                UserId = loggedUserId!.Value
             };
 
             var result = await Mediator.Send(deleteDailyListCommand);

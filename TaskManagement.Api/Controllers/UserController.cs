@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Api.Controllers.Base;
 using TaskManagement.Api.Requests.Users;
+using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.Messages.Users;
 
 namespace TaskManagement.Api.Controllers
@@ -12,7 +13,8 @@ namespace TaskManagement.Api.Controllers
     [Route("api/[controller]")]
     public class UserController : BaseController
     {
-        public UserController(IMediator mediator) : base(mediator) { }
+        public UserController(IMediator mediator, ICurrentUserService currentUserService) : base(mediator, currentUserService) { }
+
         /// <summary>
         /// Updating timezone for signed user
         /// </summary>
@@ -27,7 +29,7 @@ namespace TaskManagement.Api.Controllers
             //TODO: Move request generation to factory classes for each controller
             var updateTimezoneCommand = new UpdateTimezoneCommand
             {
-                UserId = loggedUserId,
+                UserId = loggedUserId!.Value,
                 TimeZoneId = updateTimezonRequest.TimezoneId
             };
 
