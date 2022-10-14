@@ -23,7 +23,7 @@ namespace TaskManagement.Infrastructure.Repositories
         {
             return await DbContext.Users
                 .Where(x => x.Id == userId)
-                .Select(x => x.TimeZoneId)
+                .Select(x => x.TimezoneId)
                 .FirstAsync();
         }
     }

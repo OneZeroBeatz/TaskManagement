@@ -8,7 +8,7 @@ public class Task
     public DateTime Deadline { get; set; }
     //TODO: Consider enumeration
     public bool Done { get; set; }
-    public DateTime? LastDateUpdate { get; set; }
+    public DateTime? LastDoneUpdate { get; set; }
     public int DailyListId { get; set; }
     public DailyList DailyList { get; set; }
 }

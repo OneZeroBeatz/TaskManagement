@@ -39,7 +39,7 @@ public class UpdateTaskDoneStatusCommandHandler : IRequestHandler<UpdateTaskDone
             return Result.Error<int>("Not allowed to update specified task.");
 
         task.Done = request.Done;
-        task.LastDateUpdate = DateTime.UtcNow.Date;
+        task.LastDoneUpdate = DateTime.UtcNow.Date;
 
         await _taskRepository.UpdateAsync(task);
 

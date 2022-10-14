@@ -26,7 +26,7 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
         {
             return DbContext.Tasks
                 .Where(x => x.Done)
-                .Where(x => x.LastDateUpdate == date)
+                .Where(x => x.LastDoneUpdate == date)
                 .Include(x => x.DailyList)
                 .Where(x => x.DailyList.UserId == userId)
                 .CountAsync();

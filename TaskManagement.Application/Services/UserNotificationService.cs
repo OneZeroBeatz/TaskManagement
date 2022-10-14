@@ -20,7 +20,7 @@ namespace TaskManagement.Application.Services
         {
             var user = await _userRepository.GetByEmailAsync(userEmail);
 
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(user!.TimeZoneId);
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(user!.TimezoneId);
 
             var userZoneDatetimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, userTimeZone);
 
