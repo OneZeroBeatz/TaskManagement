@@ -13,7 +13,7 @@ public class UserPersistenceCheckMiddleware
         _next = next;
     }
 
-    public async Task Invoke(HttpContext httpContext, IUserRepository emailRepository, ICurrentUserService currentUser)
+    public async Task Invoke(HttpContext httpContext, IUserRepository userRepository, ICurrentUserService currentUser)
     {
         if (!currentUser.UserId.HasValue)
         {
@@ -21,7 +21,7 @@ public class UserPersistenceCheckMiddleware
             return;
         }
 
-        var user = await emailRepository.FindAsync(currentUser.UserId.Value);
+        var user = await userRepository.FindAsync(currentUser.UserId.Value, httpContext.RequestAborted);
 
         if (user == null)
         {

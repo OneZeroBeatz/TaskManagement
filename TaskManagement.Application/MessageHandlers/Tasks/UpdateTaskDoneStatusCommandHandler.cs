@@ -28,7 +28,7 @@ public class UpdateTaskDoneStatusCommandHandler : IRequestHandler<UpdateTaskDone
         if (!result.IsValid)
             return result.CreateErrorResult();
 
-        var task = await _taskRepository.FindAsync(request.TaskId);
+        var task = await _taskRepository.FindAsync(request.TaskId, cancellationToken);
 
         if (task == null)
             return Result.Error("Task does not exist.");

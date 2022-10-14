@@ -30,7 +30,7 @@ public class UpdateTimezoneCommandHandler : IRequestHandler<UpdateTimezoneComman
             if (!result.IsValid)
                 return result.CreateErrorResult();
 
-            var user = await _userRepository.FindAsync(request.UserId);
+            var user = await _userRepository.FindAsync(request.UserId, cancellationToken);
 
             //TODO: Move to fluent validator
             var timezone = TimeZoneInfo.FindSystemTimeZoneById(request.TimeZoneId);

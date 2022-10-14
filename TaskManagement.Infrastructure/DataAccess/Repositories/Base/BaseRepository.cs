@@ -11,9 +11,9 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories.Base
             DbContext = dbContext;
         }
 
-        public async Task<T?> FindAsync(int id)
+        public async Task<T?> FindAsync(int id, CancellationToken token)
         {
-            return await DbContext.FindAsync<T>(id);
+            return await DbContext.FindAsync<T>(new object[] { id }, token);
         }
 
         public async Task<T> InsertAsync(T entity)
