@@ -6,16 +6,16 @@ namespace TaskManagement.Application.MessageHandlers.Users
 {
     public class TimezoneUpdatedEventHandler : IRequestHandler<TimezoneUpdatedEvent>
     {
-        private readonly INotificationJobUpdateService _notificationJobUpdateService;
+        private readonly INotificationService _notificationService;
 
-        public TimezoneUpdatedEventHandler(INotificationJobUpdateService notificationJobUpdateService)
+        public TimezoneUpdatedEventHandler(INotificationService notificationService)
         {
-            _notificationJobUpdateService = notificationJobUpdateService ?? throw new ArgumentNullException(nameof(notificationJobUpdateService));
+            _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
         }
 
         public Task<Unit> Handle(TimezoneUpdatedEvent request, CancellationToken cancellationToken)
         {
-            _notificationJobUpdateService.UpdateJob(request.UserEmail, request.Timezone);
+            _notificationService.UpdateNotificationTimezone(request.UserEmail, request.Timezone);
             return Task.FromResult(Unit.Value);
         }
     }

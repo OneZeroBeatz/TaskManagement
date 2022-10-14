@@ -12,16 +12,13 @@ public class UpdateTimezoneCommandHandler : IRequestHandler<UpdateTimezoneComman
 {
     private readonly IUserRepository _userRepository;
     private readonly IValidator<UpdateTimezoneCommand> _validator;
-    private readonly INotificationJobUpdateService _notificationJobUpdateService;
     private readonly IMediator _mediator;
     public UpdateTimezoneCommandHandler(IUserRepository userRepository,
                                         IValidator<UpdateTimezoneCommand> validator,
-                                        INotificationJobUpdateService notificationJobUpdateService, 
                                         IMediator mediator)
     {
         _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-        _notificationJobUpdateService = notificationJobUpdateService ?? throw new ArgumentNullException(nameof(notificationJobUpdateService));
         _mediator = mediator;
     }
     //TODO: Add exception handling filter
@@ -40,6 +37,7 @@ public class UpdateTimezoneCommandHandler : IRequestHandler<UpdateTimezoneComman
 
             user!.TimeZoneId = request.TimeZoneId;
             await _userRepository.UpdateAsync(user);
+
             await _mediator.Publish(new TimezoneUpdatedEvent { UserEmail = user.Email, Timezone = timezone });
 
             return Result.Ok();
