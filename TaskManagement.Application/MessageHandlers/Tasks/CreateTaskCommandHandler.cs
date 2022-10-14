@@ -11,30 +11,23 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Resul
 {
     private readonly ITaskRepository _taskRepository;
     private readonly IUserRepository _userRepository;
-    private readonly IDailyListRepository _dailyListRepository;
     private readonly IValidator<CreateTaskCommand> _validator;
 
     public CreateTaskCommandHandler(IValidator<CreateTaskCommand> validator,
-                                    IDailyListRepository dailyListRepository,
                                     IUserRepository userRepository,
                                     ITaskRepository taskRepository)
     {
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-        _dailyListRepository = dailyListRepository ?? throw new ArgumentNullException(nameof(dailyListRepository));
         _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         _taskRepository = taskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
     }
 
     public async Task<Result<int>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
-        var result = _validator.Validate(request);
+        var result = await _validator.ValidateAsync(request);
         if (!result.IsValid)
             return result.CreateErrorResult<int>();
 
-        var listExists = await _dailyListRepository.Exists(request.DailyListId, request.UserId, cancellationToken);
-
-        if (!listExists)
-            return Result.Error<int>("Daily list does not exist.");
 
         string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId);
         var timezoneInfo = TimeZoneInfo.FindSystemTimeZoneById(userTimezoneId);

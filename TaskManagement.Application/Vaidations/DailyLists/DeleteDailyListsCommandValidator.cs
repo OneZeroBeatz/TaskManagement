@@ -19,7 +19,5 @@ public class DeleteDailyListCommandValidator : AbstractValidator<DeleteDailyList
     }
 
     public Task<bool> Exists(DeleteDailyListCommand command, CancellationToken token)
-    {
-        return _dailyListRepository.Exists(command.DailyListId, command.UserId, token);
-    }
+        => _dailyListRepository.Exists(command.DailyListId, command.UserId, token);
 }
