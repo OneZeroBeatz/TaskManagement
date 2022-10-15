@@ -65,7 +65,6 @@ builder.Services.AddScoped<IGetDailyListsResponseFactory, GetDailyListsResponseF
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddScoped<INotificationService, NotificationService>();
-builder.Services.AddScoped<IUserNotificationService, UserNotificationService>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 builder.Services.AddHostedService<HostedService>();
@@ -102,7 +101,7 @@ else
     app.ConfigureExceptionHandler();
 }
 
-
+app.UseHangfireDashboard();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();

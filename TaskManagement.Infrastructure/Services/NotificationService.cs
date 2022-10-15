@@ -1,19 +1,15 @@
 ﻿using Hangfire;
-using TaskManagement.Application.Interfaces;
+using TaskManagement.Application.Services;
+using TaskManagement.Infrastructure.Bridges;
 
 namespace TaskManagement.Infrastructure.Services;
 
 public class NotificationService : INotificationService
 {
-    private readonly IUserNotificationService _userNotificationService;
-
-    public NotificationService(IUserNotificationService userNotificationService)
-    {
-        _userNotificationService = userNotificationService ?? throw new ArgumentNullException(nameof(userNotificationService));
-    }
-
     public void AddOrUpdateNotificationTimezone(string userEmail, TimeZoneInfo timeZoneInfo)
     {
-        RecurringJob.AddOrUpdate(userEmail, () => _userNotificationService.NotifyUser(userEmail), "0 0 * * *", timeZoneInfo);
+        var command = new SendCompletedTasksUserNotificationCommand() { UserEmail = userEmail };
+
+        RecurringJob.AddOrUpdate<MediatorHangfireBrigde>(userEmail, x => x.Send(command), "0 0 * * *", timeZoneInfo);
     }
 }

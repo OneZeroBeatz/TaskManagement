@@ -1,28 +1,31 @@
-﻿using TaskManagement.Application.Dtos;
+﻿using MediatR;
+using TaskManagement.Application.Dtos;
 using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.Repositories;
 
 namespace TaskManagement.Application.Services
 {
-    public class UserNotificationService : IUserNotificationService
+    public class SendCompletedTasksUserNotificationCommandHandler : IRequestHandler<SendCompletedTasksUserNotificationCommand>
     {
         private readonly IUserRepository _userRepository;
         private readonly ITaskRepository _taskRepository;
         private readonly IEmailSender _emailSender;
 
-        public UserNotificationService(IUserRepository userRepository, ITaskRepository taskRepository, IEmailSender emailSender)
+        public SendCompletedTasksUserNotificationCommandHandler(IUserRepository userRepository,
+                                                                ITaskRepository taskRepository,
+                                                                IEmailSender emailSender)
         {
             _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
             _taskRepository = taskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
             _emailSender = emailSender ?? throw new ArgumentNullException(nameof(emailSender));
         }
 
-        public async Task NotifyUser(string userEmail)
+        public async Task<Unit> Handle(SendCompletedTasksUserNotificationCommand request, CancellationToken cancellationToken)
         {
-            var user = await _userRepository.GetByEmailAsync(userEmail, CancellationToken.None);
+            var user = await _userRepository.GetByEmailAsync(request.UserEmail, cancellationToken);
 
             if (user == null)
-                return;
+                return Unit.Value;
 
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(user.TimezoneId);
 
@@ -36,10 +39,12 @@ namespace TaskManagement.Application.Services
             {
                 Subject = "Finished tasks",
                 Body = $"You finished {finishedTasksForDateCount} tasks for last day",
-                ToEmail = userEmail
+                ToEmail = request.UserEmail
             };
 
             await _emailSender.SendEmailAsync(mailRequest);
+
+            return Unit.Value;
         }
     }
 }
