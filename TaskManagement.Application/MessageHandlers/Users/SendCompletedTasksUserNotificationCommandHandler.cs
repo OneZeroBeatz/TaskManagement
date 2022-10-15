@@ -22,13 +22,23 @@ namespace TaskManagement.Application.Services
 
         public async Task<Unit> Handle(SendCompletedTasksUserNotificationCommand request, CancellationToken cancellationToken)
         {
+            //TODO: Create validator
             var user = await _userRepository.GetByEmailAsync(request.UserEmail, cancellationToken);
 
             if (user == null)
                 return Unit.Value;
 
             //TODO: Move to factory
-            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(user.TimezoneId);
+            var mailRequest = await MailRequestFactory(request, user);
+
+            await _emailSender.SendEmailAsync(mailRequest);
+
+            return Unit.Value;
+        }
+
+        private async Task<MailRequest> MailRequestFactory(SendCompletedTasksUserNotificationCommand request, Domain.Models.User? user)
+        {
+            var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(user!.TimezoneId);
 
             var userZoneDatetimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, userTimeZone);
 
@@ -43,9 +53,7 @@ namespace TaskManagement.Application.Services
                 ToEmail = request.UserEmail
             };
 
-            await _emailSender.SendEmailAsync(mailRequest);
-
-            return Unit.Value;
+            return mailRequest;
         }
     }
 }
