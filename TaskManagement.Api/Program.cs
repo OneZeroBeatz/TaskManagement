@@ -12,6 +12,7 @@ using TaskManagement.Api;
 using TaskManagement.Api.Extensions;
 using TaskManagement.Api.Services;
 using TaskManagement.Application.Factories;
+using TaskManagement.Application.Factories.DailyLists;
 using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.MessageHandlers.Users;
 using TaskManagement.Application.Repositories;
@@ -70,6 +71,9 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<IAuthenticationTokenFactory, AuthenticationTokenFactory>();
 builder.Services.AddScoped<IGetTasksForDailyListResponseFactory, GetTasksForDailyListResponseFactory>();
 builder.Services.AddScoped<IGetDailyListsResponseFactory, GetDailyListsResponseFactory>();
+builder.Services.AddScoped<IDailyListFactory, DailyListFactory>();
+
+
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddScoped<INotificationService, NotificationService>();

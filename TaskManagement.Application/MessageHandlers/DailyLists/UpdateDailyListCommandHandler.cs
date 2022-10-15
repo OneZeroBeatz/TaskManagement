@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
 using TaskManagement.Application.Extensions;
+using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.Messages.DailyLists;
 using TaskManagement.Application.Repositories;
-using TaskManagement.Domain.Models;
 using TaskManagement.Shared;
 
 namespace TaskManagement.Application.MessageHandlers.DailyLists;
@@ -11,13 +11,16 @@ namespace TaskManagement.Application.MessageHandlers.DailyLists;
 public class UpdateDailyListCommandHandler : IRequestHandler<UpdateDailyListCommand, Result>
 {
     private readonly IDailyListRepository _dailyListRepository;
+    private readonly IDailyListFactory _dailyListFactory;
     private readonly IValidator<UpdateDailyListCommand> _validator;
 
     public UpdateDailyListCommandHandler(IValidator<UpdateDailyListCommand> validator,
-                                         IDailyListRepository dailyListRepository)
+                                         IDailyListRepository dailyListRepository,
+                                         IDailyListFactory dailyListFactory)
     {
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
         _dailyListRepository = dailyListRepository ?? throw new ArgumentNullException(nameof(dailyListRepository));
+        _dailyListFactory = dailyListFactory ?? throw new ArgumentNullException(nameof(dailyListFactory));
     }
 
     public async Task<Result> Handle(UpdateDailyListCommand request, CancellationToken cancellationToken)
@@ -26,15 +29,7 @@ public class UpdateDailyListCommandHandler : IRequestHandler<UpdateDailyListComm
         if (!result.IsValid)
             return result.CreateErrorResult();
 
-        //TODO: Create factory
-        var dailyList = new DailyList()
-        {
-            Id = request.DailyListId,
-            Title = request.Title,
-            Description = request.Description,
-            Date = request.Date,
-            UserId = request.UserId
-        };
+        var dailyList = _dailyListFactory.CreateDailyList(request);
 
         await _dailyListRepository.UpdateAsync(dailyList, cancellationToken);
 
