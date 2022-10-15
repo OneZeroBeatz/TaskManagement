@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
 using System.Reflection;
 using System.Text;
 using TaskManagement.Api;
@@ -14,7 +15,6 @@ using TaskManagement.Application.Factories;
 using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.MessageHandlers.Users;
 using TaskManagement.Application.Repositories;
-using TaskManagement.Application.Services;
 using TaskManagement.Application.Vaidations.Users;
 using TaskManagement.Infrastructure.Configurations;
 using TaskManagement.Infrastructure.DataAccess;
@@ -32,7 +32,15 @@ builder.Services.AddDbContext<TaskManagementDbContext>(options =>
     options.UseSqlServer(dbConnectionString);
 });
 
-builder.Services.AddHangfire(x => x.UseInMemoryStorage());
+builder.Services.AddHangfire(x =>
+{
+    x.UseInMemoryStorage();
+    x.UseSerializerSettings(new JsonSerializerSettings
+    {
+        TypeNameHandling = TypeNameHandling.All,
+    });
+});
+
 builder.Services.AddHangfireServer();
 
 builder.Services.AddMvc().AddSessionStateTempDataProvider();

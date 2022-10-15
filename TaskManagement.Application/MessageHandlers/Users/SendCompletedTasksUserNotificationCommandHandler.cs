@@ -27,6 +27,7 @@ namespace TaskManagement.Application.Services
             if (user == null)
                 return Unit.Value;
 
+            //TODO: Move to factory
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(user.TimezoneId);
 
             var userZoneDatetimeNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, userTimeZone);
