@@ -25,7 +25,7 @@ public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Resul
 
     public async Task<Result<int>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
     {
-        var result = await _validator.ValidateAsync(request);
+        var result = await _validator.ValidateAsync(request, cancellationToken);
         if (!result.IsValid)
             return result.CreateErrorResult<int>();
 
