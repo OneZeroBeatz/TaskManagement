@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
 using TaskManagement.Application.Extensions;
+using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.Messages.Tasks;
 using TaskManagement.Application.Repositories;
 using TaskManagement.Shared;
@@ -10,15 +11,15 @@ namespace TaskManagement.Application.MessageHandlers.Tasks;
 public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Result>
 {
     private readonly ITaskRepository _taskRepository;
-    private readonly IUserRepository _userRepository;
+    private readonly ITaskFactory _taskFactory;
     private readonly IValidator<UpdateTaskCommand> _validator;
 
     public UpdateTaskCommandHandler(IValidator<UpdateTaskCommand> validator,
-                                    IUserRepository userRepository,
+                                    ITaskFactory taskFactory,
                                     ITaskRepository taskRepository)
     {
         _validator = validator ?? throw new ArgumentNullException(nameof(validator));
-        _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
+        _taskFactory = taskFactory ?? throw new ArgumentNullException(nameof(taskFactory));
         _taskRepository = taskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
     }
 
@@ -29,17 +30,11 @@ public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Resul
         if (!result.IsValid)
             return result.CreateErrorResult();
 
-        var task = await _taskRepository.FindAsync(request.TaskId, cancellationToken);
-
-        string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId, cancellationToken);
-        var timezoneInfo = TimeZoneInfo.FindSystemTimeZoneById(userTimezoneId);
-
-        task!.Title = request.Title;
-        task.Description = request.Description;
-        task.Deadline = TimeZoneInfo.ConvertTimeToUtc(request.Deadline, timezoneInfo);
+        var task = await _taskFactory.CreateTaskAsync(request, cancellationToken);
 
         await _taskRepository.UpdateAsync(task, cancellationToken);
 
         return Result.Ok();
     }
+
 }

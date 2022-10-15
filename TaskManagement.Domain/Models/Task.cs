@@ -10,5 +10,5 @@ public class Task
     public bool Done { get; set; }
     public DateTime? LastDoneUpdate { get; set; }
     public int DailyListId { get; set; }
-    public DailyList DailyList { get; set; }
+    public DailyList DailyList { get; set; } = null!;
 }

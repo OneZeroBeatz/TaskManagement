@@ -22,6 +22,7 @@ using TaskManagement.Infrastructure.DataAccess;
 using TaskManagement.Infrastructure.DataAccess.Repositories;
 using TaskManagement.Infrastructure.Repositories;
 using TaskManagement.Infrastructure.Services;
+using TaskFactory = TaskManagement.Application.Factories.TaskFactory;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,6 +73,7 @@ builder.Services.AddScoped<IAuthenticationTokenFactory, AuthenticationTokenFacto
 builder.Services.AddScoped<IGetTasksForDailyListResponseFactory, GetTasksForDailyListResponseFactory>();
 builder.Services.AddScoped<IGetDailyListsResponseFactory, GetDailyListsResponseFactory>();
 builder.Services.AddScoped<IDailyListFactory, DailyListFactory>();
+builder.Services.AddScoped<ITaskFactory, TaskFactory>();
 
 
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
