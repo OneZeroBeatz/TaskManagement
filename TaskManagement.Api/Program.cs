@@ -12,7 +12,6 @@ using TaskManagement.Api;
 using TaskManagement.Api.Extensions;
 using TaskManagement.Api.Services;
 using TaskManagement.Application.Factories;
-using TaskManagement.Application.Factories.DailyLists;
 using TaskManagement.Application.Interfaces;
 using TaskManagement.Application.MessageHandlers.Users;
 using TaskManagement.Application.Repositories;

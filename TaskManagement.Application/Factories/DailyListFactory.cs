@@ -2,7 +2,7 @@
 using TaskManagement.Application.Messages.DailyLists;
 using TaskManagement.Domain.Models;
 
-namespace TaskManagement.Application.Factories.DailyLists;
+namespace TaskManagement.Application.Factories;
 
 public class DailyListFactory : IDailyListFactory
 {
