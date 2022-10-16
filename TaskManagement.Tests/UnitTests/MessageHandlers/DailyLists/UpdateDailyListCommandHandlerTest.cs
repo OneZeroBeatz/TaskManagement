@@ -8,31 +8,31 @@ using TaskManagement.Application.Repositories;
 using TaskManagement.Domain.Models;
 using Task = System.Threading.Tasks.Task;
 
-namespace TaskManagement.Tests.UnitTests.MessageHandlers
+namespace TaskManagement.Tests.UnitTests.MessageHandlers.DailyLists
 {
-    public class CreateDailyListCommandHandlerTests
+    public class UpdateDailyListCommandHandlerTests
     {
-        private Mock<IValidator<CreateDailyListCommand>>? _validatorMock;
+        private Mock<IValidator<UpdateDailyListCommand>>? _validatorMock;
         private Mock<IDailyListRepository>? _repositoryMock;
         private Mock<IDailyListFactory>? _factoryMock;
 
-        private CreateDailyListCommandHandler? _handler;
+        private UpdateDailyListCommandHandler? _handler;
 
-        private CreateDailyListCommand? _command;
+        private UpdateDailyListCommand? _command;
 
         private DailyList? _entity;
 
         [SetUp]
         public void Setup()
         {
-            _validatorMock = new Mock<IValidator<CreateDailyListCommand>>();
+            _validatorMock = new Mock<IValidator<UpdateDailyListCommand>>();
             _repositoryMock = new Mock<IDailyListRepository>();
             _factoryMock = new Mock<IDailyListFactory>();
 
-            _command = new CreateDailyListCommand();
+            _command = new UpdateDailyListCommand();
             _entity = new DailyList();
 
-            _handler = new CreateDailyListCommandHandler(_validatorMock.Object,
+            _handler = new UpdateDailyListCommandHandler(_validatorMock.Object,
                                                         _repositoryMock.Object,
                                                         _factoryMock.Object);
 
@@ -101,21 +101,11 @@ namespace TaskManagement.Tests.UnitTests.MessageHandlers
         }
 
         [Test]
-        public async Task Handle_CommandValid_ReturnsEntityId()
-        {
-            _entity!.Id = 10;
-
-            var result = await _handler!.Handle(_command!, default);
-
-            Assert.AreEqual(10, result.Value);
-        }
-
-        [Test]
-        public async Task Handle_CommandValid_EntityInserted()
+        public async Task Handle_CommandValid_EntityUpdated()
         {
             await _handler!.Handle(_command!, default);
 
-            _repositoryMock!.Verify(x => x.InsertAsync(_entity!, default), Times.Once);
+            _repositoryMock!.Verify(x => x.UpdateAsync(_entity!, default), Times.Once);
         }
     }
 }
