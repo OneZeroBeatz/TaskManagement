@@ -10,6 +10,7 @@ namespace TaskManagement.Application.MessageHandlers.DailyLists;
 
 public class CreateDailyListCommandHandler : IRequestHandler<CreateDailyListCommand, Result<int>>
 {
+    //TODO: Use generic repository, consider generic factory and handlers by operation
     private readonly IDailyListRepository _dailyListRepository;
     private readonly IDailyListFactory _dailyListFactory;
     private readonly IValidator<CreateDailyListCommand> _validator;
