@@ -18,7 +18,7 @@ public class HostedService : IHostedService
         var notificationService = scope.ServiceProvider.GetRequiredService<INotificationService>();
         var userRepository = scope.ServiceProvider.GetRequiredService<IUserRepository>();
 
-        var users = await userRepository.GetAll();
+        var users = await userRepository.GetAllAsync();
 
         await Task.Run(() =>
         {

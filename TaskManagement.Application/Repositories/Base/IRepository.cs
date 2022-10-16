@@ -6,6 +6,6 @@
         Task<T?> FindAsync(int id, CancellationToken token);
         Task<T> InsertAsync(T entity, CancellationToken token);
         Task UpdateAsync(T entity, CancellationToken token);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(int id, CancellationToken token);
     }
 }

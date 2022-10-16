@@ -44,6 +44,5 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
                 .Where(x => x.Date == date.Date)
                 .Where(x => x.Title.Contains(title)); 
         }
-
     }
 }

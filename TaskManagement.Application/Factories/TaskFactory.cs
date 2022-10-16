@@ -18,7 +18,7 @@ public class TaskFactory : ITaskFactory
     //TODO: Consider not using commands as parameter here
     public async Task<Domain.Models.Task> CreateTaskAsync(CreateTaskCommand request, CancellationToken cancellationToken)
     {
-        string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId, cancellationToken);
+        string userTimezoneId = await _userRepository.GetTimezoneIdAsync(request.UserId, cancellationToken);
         var timezoneInfo = TimeZoneInfo.FindSystemTimeZoneById(userTimezoneId);
 
         return new Domain.Models.Task()
@@ -35,7 +35,7 @@ public class TaskFactory : ITaskFactory
     {
         var task = await _taskRepository.FindAsync(request.TaskId, cancellationToken);
 
-        string userTimezoneId = await _userRepository.GetTimezoneId(request.UserId, cancellationToken);
+        string userTimezoneId = await _userRepository.GetTimezoneIdAsync(request.UserId, cancellationToken);
         var timezoneInfo = TimeZoneInfo.FindSystemTimeZoneById(userTimezoneId);
 
         task!.Title = request.Title;

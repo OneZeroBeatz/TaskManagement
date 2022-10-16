@@ -12,7 +12,7 @@ namespace TaskManagement.Infrastructure.Repositories
         {
         }
 
-        public Task<List<User>> GetAll()
+        public Task<List<User>> GetAllAsync()
         {
             return DbContext.Users.ToListAsync();
         }
@@ -22,7 +22,7 @@ namespace TaskManagement.Infrastructure.Repositories
             return DbContext.Users
                 .FirstOrDefaultAsync(x => x.Email.Equals(email), token);
         }
-        public Task<string> GetTimezoneId(int userId, CancellationToken token)
+        public Task<string> GetTimezoneIdAsync(int userId, CancellationToken token)
         {
             return DbContext.Users
                 .Where(x => x.Id == userId)

@@ -25,7 +25,7 @@ public class DeleteDailyListCommandHandler : IRequestHandler<DeleteDailyListComm
         if (!result.IsValid)
             return result.CreateErrorResult();
 
-        await _dailyListRepository.DeleteAsync(request.DailyListId);
+        await _dailyListRepository.DeleteAsync(request.DailyListId, cancellationToken);
 
         return Result.Ok();
     }

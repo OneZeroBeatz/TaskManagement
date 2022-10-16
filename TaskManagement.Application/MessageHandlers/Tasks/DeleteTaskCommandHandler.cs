@@ -25,7 +25,7 @@ public class DeleteTaskCommandHandler : IRequestHandler<DeleteTaskCommand, Resul
         if (!result.IsValid)
             return result.CreateErrorResult();
 
-        await _taskRepository.DeleteAsync(request.TaskId);
+        await _taskRepository.DeleteAsync(request.TaskId, cancellationToken);
 
         return Result.Ok();
     }
