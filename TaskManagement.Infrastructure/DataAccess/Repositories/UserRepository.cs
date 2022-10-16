@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Threading;
 using TaskManagement.Application.Repositories;
 using TaskManagement.Domain.Models;
 using TaskManagement.Infrastructure.DataAccess;
@@ -12,9 +13,9 @@ namespace TaskManagement.Infrastructure.Repositories
         {
         }
 
-        public Task<List<User>> GetAllAsync()
+        public Task<List<User>> GetAllAsync(CancellationToken token = default)
         {
-            return DbContext.Users.ToListAsync();
+            return DbContext.Users.ToListAsync(token);
         }
 
         public Task<User?> GetByEmailAsync(string email, CancellationToken token)
