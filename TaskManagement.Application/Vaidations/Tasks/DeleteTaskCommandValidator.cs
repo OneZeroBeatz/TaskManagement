@@ -13,7 +13,7 @@ public class DeleteTaskCommandValidator : TaskPersistenceAbstractValidator<Delet
 
         RuleFor(command => command).NotNull();
         RuleFor(command => command)
-            .MustAsync((command, token) => ExistsForUser(command.TaskId, command.TaskId, token))
+            .MustAsync((command, token) => ExistsForUser(command.TaskId, command.UserId, token))
             .WithMessage("Task does not exist");
     }
 }
