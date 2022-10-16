@@ -2,45 +2,44 @@ using FluentValidation;
 using FluentValidation.Results;
 using Moq;
 using TaskManagement.Application.Interfaces;
-using TaskManagement.Application.MessageHandlers.DailyLists;
-using TaskManagement.Application.Messages.DailyLists;
+using TaskManagement.Application.MessageHandlers.Tasks;
+using TaskManagement.Application.Messages.Tasks;
 using TaskManagement.Application.Repositories;
-using TaskManagement.Domain.Models;
 using Task = System.Threading.Tasks.Task;
 
-namespace TaskManagement.Tests.UnitTests.MessageHandlers.DailyLists
+namespace TaskManagement.Tests.UnitTests.MessageHandlers.Tasks
 {
-    public class UpdateDailyListCommandHandlerTests
+    public class UpdateTasksCommandHandlerTests
     {
-        private Mock<IValidator<UpdateDailyListCommand>>? _validatorMock;
-        private Mock<IDailyListRepository>? _repositoryMock;
-        private Mock<IDailyListFactory>? _factoryMock;
+        private Mock<IValidator<UpdateTaskCommand>>? _validatorMock;
+        private Mock<ITaskRepository>? _repositoryMock;
+        private Mock<ITaskFactory>? _factoryMock;
 
-        private UpdateDailyListCommandHandler? _handler;
+        private UpdateTaskCommandHandler? _handler;
 
-        private UpdateDailyListCommand? _command;
+        private UpdateTaskCommand? _command;
 
-        private DailyList? _entity;
+        private Domain.Models.Task? _entity;
 
         [SetUp]
         public void Setup()
         {
-            _validatorMock = new Mock<IValidator<UpdateDailyListCommand>>();
-            _repositoryMock = new Mock<IDailyListRepository>();
-            _factoryMock = new Mock<IDailyListFactory>();
+            _validatorMock = new Mock<IValidator<UpdateTaskCommand>>();
+            _repositoryMock = new Mock<ITaskRepository>();
+            _factoryMock = new Mock<ITaskFactory>();
 
-            _command = new UpdateDailyListCommand();
-            _entity = new DailyList();
+            _command = new UpdateTaskCommand();
+            _entity = new Domain.Models.Task();
 
-            _handler = new UpdateDailyListCommandHandler(_validatorMock.Object,
-                                                        _repositoryMock.Object,
-                                                        _factoryMock.Object);
+            _handler = new UpdateTaskCommandHandler(_validatorMock.Object,
+                                                    _factoryMock.Object,
+                                                    _repositoryMock.Object);
 
             _validatorMock!.Setup(x => x.ValidateAsync(_command!, default))
                 .ReturnsAsync(new ValidationResult());
 
-            _factoryMock!.Setup(x => x.CreateDailyList(_command!))
-                .Returns(_entity);
+            _factoryMock!.Setup(x => x.CreateTaskAsync(_command!, default))
+                .ReturnsAsync(_entity);
         }
 
         [Test]

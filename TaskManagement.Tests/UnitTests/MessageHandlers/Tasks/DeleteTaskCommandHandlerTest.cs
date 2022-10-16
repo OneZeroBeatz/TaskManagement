@@ -1,46 +1,37 @@
 using FluentValidation;
 using FluentValidation.Results;
 using Moq;
-using TaskManagement.Application.Interfaces;
-using TaskManagement.Application.MessageHandlers.DailyLists;
-using TaskManagement.Application.Messages.DailyLists;
+using TaskManagement.Application.MessageHandlers.Tasks;
+using TaskManagement.Application.Messages.Tasks;
 using TaskManagement.Application.Repositories;
-using TaskManagement.Domain.Models;
 using Task = System.Threading.Tasks.Task;
 
-namespace TaskManagement.Tests.UnitTests.MessageHandlers.DailyLists
+namespace TaskManagement.Tests.UnitTests.MessageHandlers.Tasks
 {
-    public class UpdateDailyListCommandHandlerTests
+    public class DeleteTaskCommandHandlerTests
     {
-        private Mock<IValidator<UpdateDailyListCommand>>? _validatorMock;
-        private Mock<IDailyListRepository>? _repositoryMock;
-        private Mock<IDailyListFactory>? _factoryMock;
+        private Mock<IValidator<DeleteTaskCommand>>? _validatorMock;
+        private Mock<ITaskRepository>? _repositoryMock;
 
-        private UpdateDailyListCommandHandler? _handler;
+        private DeleteTaskCommandHandler? _handler;
 
-        private UpdateDailyListCommand? _command;
+        private DeleteTaskCommand? _command;
 
-        private DailyList? _entity;
 
         [SetUp]
         public void Setup()
         {
-            _validatorMock = new Mock<IValidator<UpdateDailyListCommand>>();
-            _repositoryMock = new Mock<IDailyListRepository>();
-            _factoryMock = new Mock<IDailyListFactory>();
+            _validatorMock = new Mock<IValidator<DeleteTaskCommand>>();
+            _repositoryMock = new Mock<ITaskRepository>();
 
-            _command = new UpdateDailyListCommand();
-            _entity = new DailyList();
+            _command = new DeleteTaskCommand();
 
-            _handler = new UpdateDailyListCommandHandler(_validatorMock.Object,
-                                                        _repositoryMock.Object,
-                                                        _factoryMock.Object);
+            _handler = new DeleteTaskCommandHandler(_validatorMock.Object,
+                                                    _repositoryMock.Object);
+
 
             _validatorMock!.Setup(x => x.ValidateAsync(_command!, default))
                 .ReturnsAsync(new ValidationResult());
-
-            _factoryMock!.Setup(x => x.CreateDailyList(_command!))
-                .Returns(_entity);
         }
 
         [Test]
@@ -50,7 +41,8 @@ namespace TaskManagement.Tests.UnitTests.MessageHandlers.DailyLists
                     new ValidationFailure("Date", "Error1")
             });
 
-            _validatorMock!.Setup(x => x.ValidateAsync(_command!, default)).ReturnsAsync(validationResult);
+            _validatorMock!.Setup(x => x.ValidateAsync(_command!, default))
+                .ReturnsAsync(validationResult);
 
             var result = await _handler!.Handle(_command!, default);
 
@@ -97,11 +89,13 @@ namespace TaskManagement.Tests.UnitTests.MessageHandlers.DailyLists
         }
 
         [Test]
-        public async Task Handle_CommandValid_EntityUpdated()
+        public async Task Handle_CommandValid_EntityDeleted()
         {
+            _command!.TaskId = 1;
+
             await _handler!.Handle(_command!, default);
 
-            _repositoryMock!.Verify(x => x.UpdateAsync(_entity!, default), Times.Once);
+            _repositoryMock!.Verify(x => x.DeleteAsync(1, default), Times.Once);
         }
     }
 }
