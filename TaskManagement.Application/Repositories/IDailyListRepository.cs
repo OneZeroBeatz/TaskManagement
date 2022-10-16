@@ -5,8 +5,8 @@ namespace TaskManagement.Application.Repositories
 {
     public interface IDailyListRepository : IRepository<DailyList>
     {
-        Task<int> GetCount(int userId, DateTime date, string title);
-        Task<List<DailyList>> Get(int userId, DateTime date, string title, int page, int pageSize);
-        Task<bool> Exists(int id, int userId, CancellationToken token);
+        Task<int> GetCountAsync(int userId, DateTime date, string title, CancellationToken token = default);
+        Task<List<DailyList>> GetAsync(int userId, DateTime date, string title, int page, int pageSize, CancellationToken token = default);
+        Task<bool> Exists(int id, int userId, CancellationToken token = default);
     }
 }

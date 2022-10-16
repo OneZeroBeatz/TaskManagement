@@ -29,14 +29,16 @@ namespace TaskManagement.Application.Services
                 return Unit.Value;
 
             //TODO: Move to factory
-            var mailRequest = await MailRequestFactory(request, user);
+            var mailRequest = await MailRequestFactory(request, user, cancellationToken);
 
             await _emailSender.SendEmailAsync(mailRequest);
 
             return Unit.Value;
         }
 
-        private async Task<MailRequest> MailRequestFactory(SendCompletedTasksUserNotificationCommand request, Domain.Models.User? user)
+        private async Task<MailRequest> MailRequestFactory(SendCompletedTasksUserNotificationCommand request,
+                                                           Domain.Models.User? user,
+                                                           CancellationToken cancellationToken)
         {
             var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(user!.TimezoneId);
 
@@ -44,7 +46,8 @@ namespace TaskManagement.Application.Services
 
             var previousDayUtcDate = userZoneDatetimeNow.AddDays(-1).ToUniversalTime().Date;
 
-            var finishedTasksForDateCount = await _taskRepository.GetFinishedTasksForDateCountAsync(user.Id, previousDayUtcDate);
+            var finishedTasksForDateCount = 
+                await _taskRepository.GetFinishedTasksForDateCountAsync(user.Id, previousDayUtcDate, cancellationToken);
 
             var mailRequest = new MailRequest()
             {

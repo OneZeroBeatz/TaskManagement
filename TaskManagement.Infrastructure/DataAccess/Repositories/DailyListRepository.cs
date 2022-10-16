@@ -11,18 +11,23 @@ namespace TaskManagement.Infrastructure.DataAccess.Repositories
         {
         }
 
-        public Task<List<DailyList>> Get(int userId, DateTime date, string title, int page, int pageSize)
+        public Task<List<DailyList>> GetAsync(int userId,
+                                              DateTime date,
+                                              string title,
+                                              int page,
+                                              int pageSize,
+                                              CancellationToken token = default)
         {
             var dailyLists = GetBy(userId, date, title)
                 .Skip((page - 1) * pageSize)
-                .Take(pageSize).ToListAsync();
+                .Take(pageSize).ToListAsync(token);
 
             return dailyLists;
         }
 
-        public Task<int> GetCount(int userId, DateTime date, string title)
+        public Task<int> GetCountAsync(int userId, DateTime date, string title, CancellationToken token = default)
         {
-            var count = GetBy(userId, date, title).CountAsync();
+            var count = GetBy(userId, date, title).CountAsync(token);
 
             return count;
         }

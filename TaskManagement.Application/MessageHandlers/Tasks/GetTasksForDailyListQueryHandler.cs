@@ -38,7 +38,7 @@ public class GetTasksForDailyListQueryHandler : IRequestHandler<GetTasksForDaily
 
         var deadlineTimeLimitUtc = TimeZoneInfo.ConvertTimeToUtc(request.DeadlineLimit!.Value, timezoneInfo);
 
-        var tasks = await _taskRepository.Get(request.DailyListId, request.Done, deadlineTimeLimitUtc);
+        var tasks = await _taskRepository.GetAsync(request.DailyListId, request.Done, deadlineTimeLimitUtc, cancellationToken);
 
         var response = _getTasksForDailyListResponseFactory.GenerateResponse(tasks, timezoneInfo);
 

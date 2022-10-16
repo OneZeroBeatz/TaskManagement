@@ -33,7 +33,8 @@ public class GetDailyListsQueryHandler : IRequestHandler<GetDailyListsQuery, Res
         if (!result.IsValid)
             return result.CreateErrorResult<GetDailyListsResponse>();
 
-        var totalNumberOfDailyLists = await _dailyListRepository.GetCount(request.UserId, request.Date!.Value, request.Title!);
+        var totalNumberOfDailyLists = 
+            await _dailyListRepository.GetCountAsync(request.UserId, request.Date!.Value, request.Title!, cancellationToken);
 
         if (totalNumberOfDailyLists == 0)
             return Result.Error<GetDailyListsResponse>("There are no such lists");
@@ -43,7 +44,8 @@ public class GetDailyListsQueryHandler : IRequestHandler<GetDailyListsQuery, Res
         if (request.Page > pageCount)
             return Result.Error<GetDailyListsResponse>("There is no such page");
 
-        var dailyListsForPage = await _dailyListRepository.Get(request.UserId, request.Date.Value, request.Title!, request.Page, PageSize);
+        var dailyListsForPage = 
+            await _dailyListRepository.GetAsync(request.UserId, request.Date.Value, request.Title!, request.Page, PageSize, cancellationToken);
 
         var response = _getDailyListsResponseFactory.GenerateResponse(request.Page, pageCount, PageSize, dailyListsForPage);
 
