@@ -23,6 +23,7 @@ namespace TaskManagement.Api.Controllers
         /// <param name="done">If the task is finished or not</param>
         /// <param name="deadlineLimit">Tasks with deadlines before provided data will be returned</param>
         /// <returns>Tasks for daily list</returns>
+        //TODO: Consider adding deadline period for filtering instead of only one date, but was not defined strictly
         [HttpGet]
         public async Task<ActionResult> Get(int dailyListId, bool done, DateTime? deadlineLimit)
         {

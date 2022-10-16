@@ -28,7 +28,6 @@ namespace TaskManagement.Application.Services
             if (user == null)
                 return Unit.Value;
 
-            //TODO: Move to factory
             var mailRequest = await MailRequestFactory(request, user, cancellationToken);
 
             await _emailSender.SendEmailAsync(mailRequest);
@@ -36,6 +35,7 @@ namespace TaskManagement.Application.Services
             return Unit.Value;
         }
 
+        //TODO: Move to factory
         private async Task<MailRequest> MailRequestFactory(SendCompletedTasksUserNotificationCommand request,
                                                            Domain.Models.User? user,
                                                            CancellationToken cancellationToken)
