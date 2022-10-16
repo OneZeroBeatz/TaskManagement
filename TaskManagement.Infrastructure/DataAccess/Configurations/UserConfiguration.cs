@@ -12,6 +12,12 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(e => e.Email).HasMaxLength(50);
         builder.Property(e => e.Password).HasMaxLength(50);
         builder.Property(e => e.TimezoneId).HasMaxLength(50);
-        builder.HasIndex(e => e.Email, "UNC_Users_Email").IsUnique();
+        builder.HasIndex(e => e.Email).IsUnique();
+        builder.HasData(new List<User>(3)
+        {
+            new User() {Id = 1, Email = "sasa.momcilovic94@gmail.com", Password = "user1pw", TimezoneId = "UTC" },
+            new User() {Id = 2, Email = "user2email@gmail.com", Password = "user2pw", TimezoneId = "UTC" },
+            new User() {Id = 3, Email = "user3email@gmail.com", Password = "user3pw", TimezoneId = "UTC" }
+        });
     }
 }
