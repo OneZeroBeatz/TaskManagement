@@ -8,7 +8,7 @@ using TaskManagement.Application.Repositories;
 using TaskManagement.Domain.Models;
 using Task = System.Threading.Tasks.Task;
 
-namespace TaskManagement.Tests.UnitTests
+namespace TaskManagement.Tests.UnitTests.MessageHandlers
 {
     public class CreateDailyListCommandHandlerTests
     {
@@ -59,11 +59,24 @@ namespace TaskManagement.Tests.UnitTests
             var result = await _handler!.Handle(_command!, default);
 
             Assert.IsFalse(result.Success);
+        }
+
+        [Test]
+        public async Task Handle_CommandNotValid_ErrorMessage()
+        {
+            var validationResult = new ValidationResult(new List<ValidationFailure> {
+                    new ValidationFailure("Date", "Error1")
+            });
+
+            _validatorMock!.Setup(x => x.ValidateAsync(_command!, default)).ReturnsAsync(validationResult);
+
+            var result = await _handler!.Handle(_command!, default);
+
             Assert.AreEqual("Error1", result.ErrorMessage);
         }
 
         [Test]
-        public async Task Handle_CommandNotValidDueToMultipleErrors_ErrorResult()
+        public async Task Handle_CommandNotValidDueToMultipleErrors_ErrorMessage()
         {
             var validationResult = new ValidationResult(
                 new List<ValidationFailure> {
@@ -76,7 +89,6 @@ namespace TaskManagement.Tests.UnitTests
 
             var result = await _handler!.Handle(_command!, default);
 
-            Assert.IsFalse(result.Success);
             Assert.AreEqual("Error1\r\nError2", result.ErrorMessage);
         }
 
