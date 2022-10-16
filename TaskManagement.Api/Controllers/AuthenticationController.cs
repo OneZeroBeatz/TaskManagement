@@ -21,6 +21,7 @@ namespace TaskManagement.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<string>> Login([FromBody] LoginRequest loginRequest)
         {
+            //TODO: Create factory or use automapper
             var loginCommand = new LoginCommand
             {
                 Email = loginRequest.Email,
