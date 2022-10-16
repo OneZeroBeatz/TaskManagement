@@ -15,7 +15,6 @@ public class TaskFactory : ITaskFactory
         _taskRepository = taskRepository ?? throw new ArgumentNullException(nameof(taskRepository));
     }
 
-    //TODO: Consider not using commands as parameter here
     public async Task<Domain.Models.Task> CreateTaskAsync(CreateTaskCommand request, CancellationToken cancellationToken)
     {
         string userTimezoneId = await _userRepository.GetTimezoneIdAsync(request.UserId, cancellationToken);

@@ -10,6 +10,7 @@ namespace TaskManagement.Application.MessageHandlers.Tasks;
 
 public class UpdateTaskCommandHandler : IRequestHandler<UpdateTaskCommand, Result>
 {
+    //TODO: Use generic repository, consider generic factory and handlers by operation
     private readonly ITaskRepository _taskRepository;
     private readonly ITaskFactory _taskFactory;
     private readonly IValidator<UpdateTaskCommand> _validator;

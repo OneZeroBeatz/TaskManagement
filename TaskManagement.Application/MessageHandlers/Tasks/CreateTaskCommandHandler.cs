@@ -10,6 +10,7 @@ namespace TaskManagement.Application.MessageHandlers.Tasks;
 
 public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, Result<int>>
 {
+    //TODO: Use generic repository, consider generic factory and handlers by operation
     private readonly ITaskRepository _taskRepository;
     private readonly ITaskFactory _taskFactory;
     private readonly IValidator<CreateTaskCommand> _validator;

@@ -9,6 +9,7 @@ namespace TaskManagement.Application.MessageHandlers.DailyLists;
 
 public class DeleteDailyListCommandHandler : IRequestHandler<DeleteDailyListCommand, Result>
 {
+    //TODO: Use generic repository, consider generic handlers by operation
     private readonly IDailyListRepository _dailyListRepository;
     private readonly IValidator<DeleteDailyListCommand> _validator;
 

@@ -9,6 +9,7 @@ namespace TaskManagement.Application.MessageHandlers.Tasks;
 
 public class DeleteTaskCommandHandler : IRequestHandler<DeleteTaskCommand, Result>
 {
+    //TODO: Use generic repository, consider generic handlers by operation
     private readonly ITaskRepository _taskRepository;
     private readonly IValidator<DeleteTaskCommand> _validator;
 
